@@ -9,6 +9,7 @@ plt.switch_backend('MacOSX')
 
 dates = []
 prices = []
+score = 0
 
 svr_lin = SVR(kernel= 'linear', C= 1e3)
 svr_poly = SVR(kernel= 'poly', C= 1e3, degree= 2)
@@ -81,8 +82,15 @@ def plot(dates, prices):
     plt.title('Support Vector Regression')
     plt.legend()
     plt.show()
-
     return 
+
+def define_score(prediction_with_rbf, last_price, score):
+    if prediction_with_rbf <= last_price:
+        score -= 1
+
+    if prediction_with_rbf >= last_price:
+        score += 1
+    return  score
 
 #Fill arrays with data from the data set  
 
@@ -114,5 +122,14 @@ print('Poly Prediction:', prediction_with_poly)
 prediction_with_rbf = predict(29, 'rbf')
 print('Rbf Prediction:', prediction_with_rbf)
 
-#Plot the dataplot(dates, prices)
+#Define a score based on your prediction (very negative score => Sell, very positive score => Buy)
+
+score = define_score(prediction_with_rbf, last_price, score)
+print(score)
+
+#Plot the data
+
+plot(dates, prices)
+
+
 

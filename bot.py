@@ -49,11 +49,7 @@ def predict(x, modell):
     if modell == 'rbf':
         return rbf_prediction
 
-    return    
-
-    #string = 'lin: ',  ,'poly: ', poly_prediction ,'rbf: ', rbf_prediction
-
-    #return string
+    return   
 
 def plot(dates, prices):    
     dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
@@ -73,7 +69,7 @@ def buy_or_sell(last_price, predicted_price):
 
     return  
 
-read_data('fb4.csv', 0) #file has to be in same dir
+read_data('fb4g.csv', 0) #file has to be in same dir
 
 train(dates, prices)
 

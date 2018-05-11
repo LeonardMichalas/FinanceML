@@ -108,18 +108,24 @@ print(last_price)
 
 #Split the dataset
 
+#function
+
 #Train the model with the filled arrays
 train(dates, prices)
 
 #Make predictions with different models
-prediction_with_lin = predict(29, 'lin')
+prediction_with_lin = predict(28, 'lin')
 print('Lin Prediction:', prediction_with_lin)
 
-prediction_with_poly = predict(29, 'poly')
+prediction_with_poly = predict(28, 'poly')
 print('Poly Prediction:', prediction_with_poly)
 
-prediction_with_rbf = predict(29, 'rbf')
+prediction_with_rbf = predict(28, 'rbf')
 print('Rbf Prediction:', prediction_with_rbf)
+
+#Calcutate the difference between the predicted and the actual data for historical data
+
+#function
 
 #Define a score based on your prediction (very negative score => Sell, very positive score => Buy)
 score = define_score(prediction_with_rbf, last_price, score)

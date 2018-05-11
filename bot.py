@@ -46,6 +46,10 @@ def get_last_price(prices):
         last_price = 0
     return last_price  
 
+def get_price_at_date(date):
+    my_index = dates.index(date)
+    return prices[my_index]
+
 def split_data(dates,prices):
     counter1 = 0
     counter2 = 0
@@ -99,11 +103,9 @@ def test(TestDates, TestPrices):
         poly_test_predictions.append([date, poly_test_prediction])
         rbf_test_predicitions.append([date, rbf_test_predicition])
 
-    print('Lin: ',lin_test_predictions)    
-    print('Poly: ',poly_test_predictions) 
-    print('Rbf: ',rbf_test_predicitions)
+    
 
-    return
+    return lin_test_predictions, poly_test_predictions, rbf_test_predicitions
 
 def predict(x, modell):
     
@@ -143,6 +145,37 @@ def define_score(prediction_with_rbf, last_price, score):
         score += 1
     return  score
 
+#function to return the difference of modell prediction and actual for one date
+def prediction_difference(date, modell):
+    a = predict(date, modell) 
+    b = get_price_at_date(date)
+    print (a)
+    print (b)
+    difference = a - b
+    return difference
+
+#function to return the average difference between prediction and actual price for all test data
+def prediction_difference_avg (test_predictions):
+    counter = 0
+    difference = 0
+    for prediction in test_predictions: 
+        actual = get_price_at_date(prediction[0])
+        #print (actual, ' counter: ', counter) #for testing purposes
+        my_prediction = prediction[1]
+        #print(my_prediction, " counter: ", counter) #for testing purposes
+        difference = difference + abs(my_prediction - actual) #absolute value used
+        #print ("difference: ", difference) #for testing purposes
+        counter = counter + 1 #iterate counter
+        
+    return difference/counter #avg difference
+
+
+
+
+
+
+
+
 
 #Function Calls    
 
@@ -152,7 +185,7 @@ print('Data successfully saved in Arrays')
 
 #Get length of the data set  - Not needed at the moment 
 #data_length = get_data_length('fb4.csv')
-#print('The dat set has', data_length, 'entrys')
+#print('The data set has', data_length, 'entrys')
 
 #Get last entry of the data set - Not needed at the moment
 #last_date = get_last_date(dates)
@@ -168,20 +201,45 @@ print('TestDates: ',TestDates)
 #Train the model with the train data set
 train(TrainDates, TrainPrices)
 
-#Test the model with the test data set
-test(TestDates, TestPrices)
+#Test the model with the test data set and print results
+lin_test_predictions, poly_test_predictions, rbf_test_predicitions = test(TestDates, TestPrices)
 
-#Make predictions for the future with different models
+print('Lin: ',lin_test_predictions)    
+print('Poly: ',poly_test_predictions) 
+print('Rbf: ',rbf_test_predicitions)
+
+
+#Make predictions for the future (30th day) with different models
 prediction_with_lin = predict(29, 'lin')
-print('Lin Prediction:', prediction_with_lin)
+print('Lin prediction:', prediction_with_lin)
 
 prediction_with_poly = predict(29, 'poly')
-print('Poly Prediction:', prediction_with_poly)
+print('Poly prediction:', prediction_with_poly)
 
 prediction_with_rbf = predict(29, 'rbf')
-print('Rbf Prediction:', prediction_with_rbf)
+print('Rbf prediction:', prediction_with_rbf)
+'''
+print ("price at 0", prices[0])
+print ("price at 27", prices[27])
+'''
+#Calcutate the difference between the predicted and the actual data for single data point (28th oct)
+difference_with_lin = prediction_difference(28, 'lin') #input date and modell
+print('Lin difference (prediction - acutal): ', difference_with_lin) #the function prints the predicted price and actual
 
-#Calcutate the difference between the predicted and the actual data for historical data
+difference_with_poly = prediction_difference(28, 'poly')
+print('Poly difference (prediction - acutal):', difference_with_poly)
+
+difference_with_rbf = prediction_difference(28, 'rbf')
+print('Rbf difference (prediction - acutal):', difference_with_rbf)
+
+
+#Calcutate the average difference between the predicted and the actual data for test set for diff modells
+print ("average difference with lin", prediction_difference_avg(lin_test_predictions))
+
+print ("average difference with poly", prediction_difference_avg(poly_test_predictions))
+
+print ("average difference with rbf", prediction_difference_avg(rbf_test_predicitions))
+
 
 #function
 

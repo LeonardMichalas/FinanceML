@@ -5,8 +5,6 @@ import numpy as np #allows to perform calculation on our data
 from sklearn.svm import SVR  #allows us to build a predictive model
 import matplotlib.pyplot as plt #allows to plot our data
 
-#plt.switch_backend('MacOSX')
-
 dates = []
 prices = []
 score = 0
@@ -23,8 +21,8 @@ def read_data(file, i):
             dates.append(int(row[0].split('-')[0])) #appends all dates to the array
             prices.append(float(row[1])) #appends all start prices to the array
 
-            print dates[i] #for testing
-            i += 1 #for testing  
+            #print dates[i] #for testing
+            #i += 1 #for testing  
     return
 
 def get_data_length(file):
@@ -46,16 +44,69 @@ def get_last_price(prices):
         last_price = prices[0]
     except IndexError:
         last_price = 0
-    return last_price    
+    return last_price  
 
-def train(dates, prices):
-    dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
+def split_data(dates,prices):
+    counter1 = 0
+    counter2 = 0
+    test_size=int(0.20*len(dates))
+    print('Volume of train data', test_size)
+    TrainDates,TrainPrices=[],[]
+    TestDates,TestPrices=[],[]
+
+    for date in dates:
+        if counter1<test_size:
+            TestDates.append(date)
+            counter1 += 1
+        else:
+            TrainDates.append(date)
+
+    for price in prices:
+        if counter2<test_size:
+            TestPrices.append(price)
+            counter2 += 1
+        else:
+            TrainPrices.append(price)        
+      
+    return TrainDates,TrainPrices,TestDates,TestPrices 
+
+def train(TrainDates, TrainPrices):
+    prices = TrainPrices # name swap from trainprices to prices
+    dates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
     svr_rbf.fit(dates, prices) #fitting the data points in the models
     svr_lin.fit(dates, prices)
     svr_poly.fit(dates, prices)
     return
 
+def test(TestDates, TestPrices):   
+    dates = TestDates # name swap from trainprices to prices
+
+    lin_test_predictions = []
+    poly_test_predictions = []
+    rbf_test_predicitions = []
+
+    lin_test_prediction = 0
+    poly_test_prediction = 0
+    rbf_test_predicition = 0
+
+    for date in dates:
+
+        lin_test_prediction = svr_lin.predict(date)[0]
+        poly_test_prediction = svr_poly.predict(date)[0]
+        rbf_test_predicition =  svr_rbf.predict(date)[0]
+        
+        lin_test_predictions.append([date, lin_test_prediction])
+        poly_test_predictions.append([date, poly_test_prediction])
+        rbf_test_predicitions.append([date, rbf_test_predicition])
+
+    print('Lin: ',lin_test_predictions)    
+    print('Poly: ',poly_test_predictions) 
+    print('Rbf: ',rbf_test_predicitions)
+
+    return
+
 def predict(x, modell):
+    
     lin_prediction = svr_lin.predict(x)[0]
     poly_prediction = svr_poly.predict(x)[0]
     rbf_prediction = svr_rbf.predict(x)[0]
@@ -92,44 +143,51 @@ def define_score(prediction_with_rbf, last_price, score):
         score += 1
     return  score
 
+
+#Function Calls    
+
 #Fill arrays with data from the data set  
-read_data('fb4.csv', 0) #file has to be in same dir
+read_data('fb20.csv', 0) #file has to be in same dir
 print('Data successfully saved in Arrays')
 
-#Get length of the data set   
-data_length = get_data_length('fb4.csv')
-print('The dat set has', data_length, 'entrys')
+#Get length of the data set  - Not needed at the moment 
+#data_length = get_data_length('fb4.csv')
+#print('The dat set has', data_length, 'entrys')
 
-#Get last entry of the data set
-last_date = get_last_date(dates)
-print(last_date)
-last_price = get_last_price(prices)
-print(last_price)
+#Get last entry of the data set - Not needed at the moment
+#last_date = get_last_date(dates)
+#print(last_date)
+#last_price = get_last_price(prices)
+#print(last_price)
 
 #Split the dataset
+TrainDates,TrainPrices,TestDates,TestPrices = split_data(dates, prices)
+print('TrainDates: ',TrainDates)
+print('TestDates: ',TestDates)
 
-#function
+#Train the model with the train data set
+train(TrainDates, TrainPrices)
 
-#Train the model with the filled arrays
-train(dates, prices)
+#Test the model with the test data set
+test(TestDates, TestPrices)
 
-#Make predictions with different models
-prediction_with_lin = predict(28, 'lin')
+#Make predictions for the future with different models
+prediction_with_lin = predict(29, 'lin')
 print('Lin Prediction:', prediction_with_lin)
 
-prediction_with_poly = predict(28, 'poly')
+prediction_with_poly = predict(29, 'poly')
 print('Poly Prediction:', prediction_with_poly)
 
-prediction_with_rbf = predict(28, 'rbf')
+prediction_with_rbf = predict(29, 'rbf')
 print('Rbf Prediction:', prediction_with_rbf)
 
 #Calcutate the difference between the predicted and the actual data for historical data
 
 #function
 
-#Define a score based on your prediction (very negative score => Sell, very positive score => Buy)
-score = define_score(prediction_with_rbf, last_price, score)
-print(score)
+#Define a score based on your prediction (very negative score => Sell, very positive score => Buy) - Not needed at the moment but working
+#score = define_score(prediction_with_rbf, last_price, score)
+#print(score)
 
 #Plot the data
 plot(dates, prices)

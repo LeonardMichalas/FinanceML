@@ -17,7 +17,7 @@ svr_rbf = SVR(kernel= 'rbf', C= 1e3, gamma= 0.1) # defining the support vector r
 def read_data(file, i):
     with open(file, 'r') as csvfile:
         csvfileReader = csv.reader(csvfile)
-        next(csvfileReader)
+        next(csvfileReader)          
         for row in csvfileReader:
             dates.append(int(row[0].split('-')[0])) #appends all dates to the array
             prices.append(float(row[1])) #appends all start prices to the array
@@ -26,13 +26,32 @@ def read_data(file, i):
             i += 1 #for testing  
     return
 
+def get_data_length(file):
+    with open(file, 'r') as csvfile:
+        csvfileReader = csv.reader(csvfile)
+        next(csvfileReader)
+        data_length = sum(1 for row in csvfileReader)     
+    return data_length    
+
+def get_last_date(dates):
+    try:
+        last_date = dates[0]
+    except IndexError:
+        last_date = 0
+    return last_date
+
+def get_last_price(prices):
+    try:
+        last_price = prices[0]
+    except IndexError:
+        last_price = 0
+    return last_price    
+
 def train(dates, prices):
     dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
     svr_rbf.fit(dates, prices) #fitting the data points in the models
     svr_lin.fit(dates, prices)
     svr_poly.fit(dates, prices)
-
-    print('models trained')
     return
 
 def predict(x, modell):
@@ -63,23 +82,37 @@ def plot(dates, prices):
     plt.legend()
     plt.show()
 
-    return    
+    return 
 
-def buy_or_sell(last_price, predicted_price):  
+#Fill arrays with data from the data set  
 
-    return  
+read_data('fb4.csv', 0) #file has to be in same dir
+print('Data successfully saved in Arrays')
 
-read_data('fb4g.csv', 0) #file has to be in same dir
+#Get length of the data set   
 
+data_length = get_data_length('fb4.csv')
+print('The dat set has', data_length, 'entrys')
+
+#Get last entry of the data set
+
+last_date = get_last_date(dates)
+print(last_date)
+last_price = get_last_price(prices)
+print(last_price)
+
+#Train the model with the filled arrays
 train(dates, prices)
 
+#Make predictions with different models
 prediction_with_lin = predict(29, 'lin')
-prediction_with_poly = predict(29, 'poly')
-prediction_with_rbf = predict(29, 'rbf')
-
 print('Lin Prediction:', prediction_with_lin)
+
+prediction_with_poly = predict(29, 'poly')
 print('Poly Prediction:', prediction_with_poly)
+
+prediction_with_rbf = predict(29, 'rbf')
 print('Rbf Prediction:', prediction_with_rbf)
 
-plot(dates, prices)
+#Plot the dataplot(dates, prices)
 

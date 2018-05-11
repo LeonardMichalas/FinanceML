@@ -5,7 +5,7 @@ import numpy as np #allows to perform calculation on our data
 from sklearn.svm import SVR  #allows us to build a predictive model
 import matplotlib.pyplot as plt #allows to plot our data
 
-plt.switch_backend('MacOSX')
+#plt.switch_backend('MacOSX')
 
 dates = []
 prices = []
@@ -93,21 +93,20 @@ def define_score(prediction_with_rbf, last_price, score):
     return  score
 
 #Fill arrays with data from the data set  
-
 read_data('fb4.csv', 0) #file has to be in same dir
 print('Data successfully saved in Arrays')
 
 #Get length of the data set   
-
 data_length = get_data_length('fb4.csv')
 print('The dat set has', data_length, 'entrys')
 
 #Get last entry of the data set
-
 last_date = get_last_date(dates)
 print(last_date)
 last_price = get_last_price(prices)
 print(last_price)
+
+#Split the dataset
 
 #Train the model with the filled arrays
 train(dates, prices)
@@ -123,12 +122,10 @@ prediction_with_rbf = predict(29, 'rbf')
 print('Rbf Prediction:', prediction_with_rbf)
 
 #Define a score based on your prediction (very negative score => Sell, very positive score => Buy)
-
 score = define_score(prediction_with_rbf, last_price, score)
 print(score)
 
 #Plot the data
-
 plot(dates, prices)
 
 

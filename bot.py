@@ -116,17 +116,20 @@ def test(TestDates, TestPrices):
 #function that allows you to predict the data of the future, based on a day and the modell you want to use
 def predict(x, modell):
     
-    lin_prediction = svr_lin.predict(x)[0]
-    poly_prediction = svr_poly.predict(x)[0]
-    rbf_prediction = svr_rbf.predict(x)[0]
+    
+   
+   
 
     if modell == 'lin':
+        lin_prediction = svr_lin.predict(x)[0]
         return lin_prediction
 
-    if modell == 'poly':    
+    if modell == 'poly':  
+        poly_prediction = svr_poly.predict(x)[0]  
         return poly_prediction
 
     if modell == 'rbf':
+        rbf_prediction = svr_rbf.predict(x)[0]
         return rbf_prediction
 
     return   

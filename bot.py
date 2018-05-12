@@ -11,8 +11,9 @@ score = 0
 
 svr_lin = SVR(kernel= 'linear', C= 1e3)
 svr_poly = SVR(kernel= 'poly', C= 1e3, degree= 2)
-svr_rbf = SVR(kernel= 'rbf', C= 1e3, gamma= 0.1) # defining the support vector regression models
+svr_rbf = SVR(kernel= 'rbf', C= 1e3, gamma= 0.1) #defining the support vector regression models
 
+#function that allows you to save data from a csv file to an array
 def read_data(file, i):
     with open(file, 'r') as csvfile:
         csvfileReader = csv.reader(csvfile)
@@ -25,13 +26,15 @@ def read_data(file, i):
             #i += 1 #for testing  
     return
 
+#function that returns the amount of rows in a given csv file
 def get_data_length(file):
     with open(file, 'r') as csvfile:
         csvfileReader = csv.reader(csvfile)
         next(csvfileReader)
         data_length = sum(1 for row in csvfileReader)     
-    return data_length    
+    return data_length 
 
+#function that returns the date of the last entry in your data set
 def get_last_date(dates):
     try:
         last_date = dates[0]
@@ -39,6 +42,7 @@ def get_last_date(dates):
         last_date = 0
     return last_date
 
+#function that returns the price of the last entry in your data set
 def get_last_price(prices):
     try:
         last_price = prices[0]
@@ -46,10 +50,12 @@ def get_last_price(prices):
         last_price = 0
     return last_price  
 
+#function that returns the price for a given date
 def get_price_at_date(date):
     my_index = dates.index(date)
     return prices[my_index]
 
+#function that splits your data set in to training (80%) and testing (20%) data
 def split_data(dates,prices):
     counter1 = 0
     counter2 = 0
@@ -74,6 +80,7 @@ def split_data(dates,prices):
       
     return TrainDates,TrainPrices,TestDates,TestPrices 
 
+#function that trains your modell with the training data
 def train(TrainDates, TrainPrices):
     prices = TrainPrices # name swap from trainprices to prices
     dates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
@@ -82,8 +89,9 @@ def train(TrainDates, TrainPrices):
     svr_poly.fit(dates, prices)
     return
 
+#function that tests your train modell with the test data
 def test(TestDates, TestPrices):   
-    dates = TestDates # name swap from trainprices to prices
+    dates = TestDates #name swap from trainprices to prices
 
     lin_test_predictions = []
     poly_test_predictions = []
@@ -103,10 +111,9 @@ def test(TestDates, TestPrices):
         poly_test_predictions.append([date, poly_test_prediction])
         rbf_test_predicitions.append([date, rbf_test_predicition])
 
-    
-
     return lin_test_predictions, poly_test_predictions, rbf_test_predicitions
 
+#function that allows you to predict the data of the future, based on a day and the modell you want to use
 def predict(x, modell):
     
     lin_prediction = svr_lin.predict(x)[0]
@@ -124,6 +131,7 @@ def predict(x, modell):
 
     return   
 
+#function that plots your data to a nice graph
 def plot(dates, prices):    
     dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
     plt.scatter(dates, prices, color= 'black', label= 'Data') # plotting the initial datapoints 
@@ -137,6 +145,7 @@ def plot(dates, prices):
     plt.show()
     return 
 
+#function to define a score, which tell you wether you should buy or sell
 def define_score(prediction_with_rbf, last_price, score):
     if prediction_with_rbf <= last_price:
         score -= 1
@@ -165,7 +174,7 @@ def prediction_difference_avg (test_predictions):
         #print(my_prediction, " counter: ", counter) #for testing purposes
         difference = difference + abs(my_prediction - actual) #absolute value used
         #print ("difference: ", difference) #for testing purposes
-        counter = counter + 1 #iterate counter
+        counter += 1 #iterate counter
         
     return difference/counter #avg difference
 
@@ -173,35 +182,31 @@ def prediction_difference_avg (test_predictions):
 
 
 
+#function Calls    
 
-
-
-
-#Function Calls    
-
-#Fill arrays with data from the data set  
+#fill arrays with data from the data set  
 read_data('fb20.csv', 0) #file has to be in same dir
 print('Data successfully saved in Arrays')
 
-#Get length of the data set  - Not needed at the moment 
+#get length of the data set  - Not needed at the moment 
 #data_length = get_data_length('fb4.csv')
 #print('The data set has', data_length, 'entrys')
 
-#Get last entry of the data set - Not needed at the moment
+#get last entry of the data set - Not needed at the moment
 #last_date = get_last_date(dates)
 #print(last_date)
 #last_price = get_last_price(prices)
 #print(last_price)
 
-#Split the dataset
+#split the dataset
 TrainDates,TrainPrices,TestDates,TestPrices = split_data(dates, prices)
 print('TrainDates: ',TrainDates)
 print('TestDates: ',TestDates)
 
-#Train the model with the train data set
+#train the model with the train data set
 train(TrainDates, TrainPrices)
 
-#Test the model with the test data set and print results
+#test the model with the test data set and print results
 lin_test_predictions, poly_test_predictions, rbf_test_predicitions = test(TestDates, TestPrices)
 
 print('Lin: ',lin_test_predictions)    
@@ -209,7 +214,7 @@ print('Poly: ',poly_test_predictions)
 print('Rbf: ',rbf_test_predicitions)
 
 
-#Make predictions for the future (30th day) with different models
+#make predictions for the future (30th day) with different models
 prediction_with_lin = predict(29, 'lin')
 print('Lin prediction:', prediction_with_lin)
 
@@ -222,7 +227,7 @@ print('Rbf prediction:', prediction_with_rbf)
 print ("price at 0", prices[0])
 print ("price at 27", prices[27])
 '''
-#Calcutate the difference between the predicted and the actual data for single data point (28th oct)
+#calcutate the difference between the predicted and the actual data for single data point (28th oct)
 difference_with_lin = prediction_difference(28, 'lin') #input date and modell
 print('Lin difference (prediction - acutal): ', difference_with_lin) #the function prints the predicted price and actual
 
@@ -233,7 +238,7 @@ difference_with_rbf = prediction_difference(28, 'rbf')
 print('Rbf difference (prediction - acutal):', difference_with_rbf)
 
 
-#Calcutate the average difference between the predicted and the actual data for test set for diff modells
+#calcutate the average difference between the predicted and the actual data for test set for diff modells
 print ("average difference with lin", prediction_difference_avg(lin_test_predictions))
 
 print ("average difference with poly", prediction_difference_avg(poly_test_predictions))
@@ -241,9 +246,7 @@ print ("average difference with poly", prediction_difference_avg(poly_test_predi
 print ("average difference with rbf", prediction_difference_avg(rbf_test_predicitions))
 
 
-#function
-
-#Define a score based on your prediction (very negative score => Sell, very positive score => Buy) - Not needed at the moment but working
+#define a score based on your prediction (very negative score => Sell, very positive score => Buy) - Not needed at the moment but working
 #score = define_score(prediction_with_rbf, last_price, score)
 #print(score)
 

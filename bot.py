@@ -19,11 +19,11 @@ def read_data(file, i):
         csvfileReader = csv.reader(csvfile)
         next(csvfileReader)          
         for row in csvfileReader:
-            dates.append(int(row[0].split('-')[0])) #appends all dates to the array
+            dates.append(int(i)) #appends all dates to the array
             prices.append(float(row[1])) #appends all start prices to the array
 
             #print dates[i] #for testing
-            #i += 1 #for testing  
+            i += 1 #for testing  
     return
 
 #function that returns the amount of rows in a given csv file
@@ -59,24 +59,24 @@ def get_price_at_date(date):
 def split_data(dates,prices):
     counter1 = 0
     counter2 = 0
-    test_size=int(0.20*len(dates))
-    print('Volume of train data', test_size)
+    train_size=int(0.80*len(dates))
+    print('Volume of train data', train_size)
     TrainDates,TrainPrices=[],[]
     TestDates,TestPrices=[],[]
 
     for date in dates:
-        if counter1<test_size:
-            TestDates.append(date)
+        if counter1<train_size:
+            TrainDates.append(date)
             counter1 += 1
         else:
-            TrainDates.append(date)
+            TestDates.append(date)
 
     for price in prices:
-        if counter2<test_size:
-            TestPrices.append(price)
+        if counter2<train_size:
+            TrainPrices.append(price)
             counter2 += 1
         else:
-            TrainPrices.append(price)        
+            TestPrices.append(price)        
       
     return TrainDates,TrainPrices,TestDates,TestPrices 
 
@@ -138,7 +138,7 @@ def plot(dates, prices):
     plt.plot(dates, svr_rbf.predict(dates), color= 'red', label= 'RBF model') # plotting the line made by the RBF kernel
     plt.plot(dates,svr_lin.predict(dates), color= 'green', label= 'Linear model') # plotting the line made by linear kernel
     plt.plot(dates,svr_poly.predict(dates), color= 'blue', label= 'Polynomial model') # plotting the line made by polynomial kernel
-    plt.xlabel('Date')
+    plt.xlabel('Day')
     plt.ylabel('Price')
     plt.title('Support Vector Regression')
     plt.legend()
@@ -185,7 +185,7 @@ def prediction_difference_avg (test_predictions):
 #function Calls    
 
 #fill arrays with data from the data set  
-read_data('fb20.csv', 0) #file has to be in same dir
+read_data('fb20.csv', 1) #file has to be in same dir
 print('Data successfully saved in Arrays')
 
 #get length of the data set  - Not needed at the moment 
@@ -215,26 +215,26 @@ print('Rbf: ',rbf_test_predicitions)
 
 
 #make predictions for the future (30th day) with different models
-prediction_with_lin = predict(29, 'lin')
+prediction_with_lin = predict(21, 'lin')
 print('Lin prediction:', prediction_with_lin)
 
-prediction_with_poly = predict(29, 'poly')
+prediction_with_poly = predict(21, 'poly')
 print('Poly prediction:', prediction_with_poly)
 
-prediction_with_rbf = predict(29, 'rbf')
+prediction_with_rbf = predict(21, 'rbf')
 print('Rbf prediction:', prediction_with_rbf)
 '''
 print ("price at 0", prices[0])
 print ("price at 27", prices[27])
 '''
 #calcutate the difference between the predicted and the actual data for single data point (28th oct)
-difference_with_lin = prediction_difference(28, 'lin') #input date and modell
+difference_with_lin = prediction_difference(20, 'lin') #input date and modell
 print('Lin difference (prediction - acutal): ', difference_with_lin) #the function prints the predicted price and actual
 
-difference_with_poly = prediction_difference(28, 'poly')
+difference_with_poly = prediction_difference(20, 'poly')
 print('Poly difference (prediction - acutal):', difference_with_poly)
 
-difference_with_rbf = prediction_difference(28, 'rbf')
+difference_with_rbf = prediction_difference(20, 'rbf')
 print('Rbf difference (prediction - acutal):', difference_with_rbf)
 
 

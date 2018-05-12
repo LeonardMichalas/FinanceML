@@ -116,10 +116,6 @@ def test(TestDates, TestPrices):
 #function that allows you to predict the data of the future, based on a day and the modell you want to use
 def predict(x, modell):
     
-    
-   
-   
-
     if modell == 'lin':
         lin_prediction = svr_lin.predict(x)[0]
         return lin_prediction
@@ -216,7 +212,6 @@ print('Lin: ',lin_test_predictions)
 print('Poly: ',poly_test_predictions) 
 print('Rbf: ',rbf_test_predicitions)
 
-
 #make predictions for the future (30th day) with different models
 prediction_with_lin = predict(21, 'lin')
 print('Lin prediction:', prediction_with_lin)
@@ -240,14 +235,12 @@ print('Poly difference (prediction - acutal):', difference_with_poly)
 difference_with_rbf = prediction_difference(20, 'rbf')
 print('Rbf difference (prediction - acutal):', difference_with_rbf)
 
-
 #calcutate the average difference between the predicted and the actual data for test set for diff modells
 print ("average difference with lin", prediction_difference_avg(lin_test_predictions))
 
 print ("average difference with poly", prediction_difference_avg(poly_test_predictions))
 
 print ("average difference with rbf", prediction_difference_avg(rbf_test_predicitions))
-
 
 #define a score based on your prediction (very negative score => Sell, very positive score => Buy) - Not needed at the moment but working
 #score = define_score(prediction_with_rbf, last_price, score)

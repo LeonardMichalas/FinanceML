@@ -9,9 +9,11 @@ dates = []
 prices = []
 score = 0
 
-svr_lin = SVR(kernel= 'linear', C= 1e3)
-svr_poly = SVR(kernel= 'poly', C= 1e3, degree= 2)
-svr_rbf = SVR(kernel= 'rbf', C= 1e3, gamma= 0.1) #defining the support vector regression models
+#defining the support vector regression models
+svr_lin = SVR(kernel = 'linear', C = 1e3)
+svr_poly = SVR(kernel = 'poly', C = 1e3, degree = 2)
+svr_rbf = SVR(kernel = 'rbf', C = 1e3, gamma = 0.1) 
+svr_sig = SVR(kernel = 'sigmoid')
 
 #function that allows you to save data from a csv file to an array
 def read_data(file, i):
@@ -87,6 +89,7 @@ def train(TrainDates, TrainPrices):
     svr_rbf.fit(dates, prices) #fitting the data points in the models
     svr_lin.fit(dates, prices)
     svr_poly.fit(dates, prices)
+    svr_sig.fit(dates, prices)
     return
 
 #function that tests your train modell with the test data
@@ -96,22 +99,26 @@ def test(TestDates, TestPrices):
     lin_test_predictions = []
     poly_test_predictions = []
     rbf_test_predicitions = []
+    sig_test_predicitions = []
 
     lin_test_prediction = 0
     poly_test_prediction = 0
     rbf_test_predicition = 0
+    sig_test_predicition = 0
 
     for date in dates:
 
         lin_test_prediction = svr_lin.predict(date)[0]
         poly_test_prediction = svr_poly.predict(date)[0]
         rbf_test_predicition =  svr_rbf.predict(date)[0]
-        
+        sig_test_predicition = svr_sig.predict(date)[0]
+
         lin_test_predictions.append([date, lin_test_prediction])
         poly_test_predictions.append([date, poly_test_prediction])
         rbf_test_predicitions.append([date, rbf_test_predicition])
+        sig_test_predicitions.append([date, sig_test_predicition])
 
-    return lin_test_predictions, poly_test_predictions, rbf_test_predicitions
+    return lin_test_predictions, poly_test_predictions, rbf_test_predicitions, sig_test_predicitions 
 
 #function that allows you to predict the data of the future, based on a day and the modell you want to use
 def predict(x, modell):
@@ -128,6 +135,10 @@ def predict(x, modell):
         rbf_prediction = svr_rbf.predict(x)[0]
         return rbf_prediction
 
+    if modell == 'sig':
+        sig_prediction = svr_sig.predict(x)[0]
+        return sig_prediction    
+
     return   
 
 #function that plots your data to a nice graph
@@ -137,6 +148,7 @@ def plot(dates, prices):
     plt.plot(dates, svr_rbf.predict(dates), color= 'red', label= 'RBF model') # plotting the line made by the RBF kernel
     plt.plot(dates,svr_lin.predict(dates), color= 'green', label= 'Linear model') # plotting the line made by linear kernel
     plt.plot(dates,svr_poly.predict(dates), color= 'blue', label= 'Polynomial model') # plotting the line made by polynomial kernel
+    plt.plot(dates,svr_sig.predict(dates), color= 'purple', label= 'Sigmoid model') # plotting the line made by polynomial kernel
     plt.xlabel('Day')
     plt.ylabel('Price')
     plt.title('Support Vector Regression')
@@ -184,7 +196,7 @@ def prediction_difference_avg (test_predictions):
 #function Calls    
 
 #fill arrays with data from the data set  
-read_data('fb20.csv', 1) #file has to be in same dir
+read_data('dax20.csv', 1) #file has to be in same dir
 print('Data successfully saved in Arrays')
 
 #get length of the data set  - Not needed at the moment 
@@ -206,11 +218,12 @@ print('TestDates: ',TestDates)
 train(TrainDates, TrainPrices)
 
 #test the model with the test data set and print results
-lin_test_predictions, poly_test_predictions, rbf_test_predicitions = test(TestDates, TestPrices)
+lin_test_predictions, poly_test_predictions, rbf_test_predicitions, sig_test_predicitions = test(TestDates, TestPrices)
 
 print('Lin: ',lin_test_predictions)    
 print('Poly: ',poly_test_predictions) 
 print('Rbf: ',rbf_test_predicitions)
+print('Sig: ',sig_test_predicitions)
 
 #make predictions for the future (30th day) with different models
 prediction_with_lin = predict(21, 'lin')
@@ -221,11 +234,15 @@ print('Poly prediction:', prediction_with_poly)
 
 prediction_with_rbf = predict(21, 'rbf')
 print('Rbf prediction:', prediction_with_rbf)
+
+prediction_with_sig = predict(21, 'sig')
+print('Sig prediction:', prediction_with_sig)
+
 '''
 print ("price at 0", prices[0])
 print ("price at 27", prices[27])
 '''
-#calcutate the difference between the predicted and the actual data for single data point (28th oct)
+#calcutate the difference between the predicted and the actual data for single data point 
 difference_with_lin = prediction_difference(20, 'lin') #input date and modell
 print('Lin difference (prediction - acutal): ', difference_with_lin) #the function prints the predicted price and actual
 
@@ -235,12 +252,17 @@ print('Poly difference (prediction - acutal):', difference_with_poly)
 difference_with_rbf = prediction_difference(20, 'rbf')
 print('Rbf difference (prediction - acutal):', difference_with_rbf)
 
+difference_with_sig = prediction_difference(20, 'sig')
+print('Sig difference (prediction - acutal):', difference_with_sig)
+
 #calcutate the average difference between the predicted and the actual data for test set for diff modells
 print ("average difference with lin", prediction_difference_avg(lin_test_predictions))
 
 print ("average difference with poly", prediction_difference_avg(poly_test_predictions))
 
 print ("average difference with rbf", prediction_difference_avg(rbf_test_predicitions))
+
+print ("average difference with sig", prediction_difference_avg(sig_test_predicitions))
 
 #define a score based on your prediction (very negative score => Sell, very positive score => Buy) - Not needed at the moment but working
 #score = define_score(prediction_with_rbf, last_price, score)

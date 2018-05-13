@@ -5,6 +5,8 @@ import numpy as np #allows to perform calculation on our data
 from sklearn.svm import SVR  #allows us to build a predictive model
 import matplotlib.pyplot as plt #allows to plot our data
 import threading
+from pandas import Series
+from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 
 dates = []
 prices = []
@@ -26,8 +28,21 @@ def read_data(file, i):
             prices.append(float(row[1])) #appends all start prices to the array
 
             #print dates[i] #for testing
-            i += 1 #for testing  
-    return
+            i += 1 #for testing       
+    return   
+
+#Normalizes the data so we can train the modells with high performance
+def normalize(dates):
+    series = Series(dates)
+    values = series.values
+    values = values.reshape((len(values), 1))
+    scaler = MinMaxScaler(feature_range=(0,1))
+    scaler = scaler.fit(values)
+    normalized = scaler.transform(values)
+    
+    dates = normalized    
+    print(dates)
+    return dates  
 
 #function that returns the amount of rows in a given csv file
 def get_data_length(file):
@@ -55,7 +70,7 @@ def get_last_price(prices):
 
 #function that returns the price for a given date
 def get_price_at_date(date):
-    my_index = dates.index(date)
+    my_index = dates.tolist().index(date)
     return prices[my_index]
 
 #function that splits your data set in to training (80%) and testing (20%) data
@@ -85,6 +100,15 @@ def split_data(dates,prices):
 
 #function that trains your modell with the training data
 def train(TrainDates, TrainPrices):
+
+    #series = Series(TrainDates)
+    #values = series.values
+    #values = values.reshape((len(values), 1))
+    #scaler = MinMaxScaler(feature_range=(0,1))
+    #scaler = scaler.fit(values)
+    #normalized = scaler.transform(values)
+    
+    #TrainDates = normalized
    
     TrainDates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
 
@@ -113,7 +137,9 @@ def train(TrainDates, TrainPrices):
     return
 
 #function that tests your train modell with the test data
-def test(TestDates, TestPrices):   
+def test(TestDates, TestPrices):  
+
+    TestDates = np.array(TestDates).ravel() #Brings testing data into the right format for the predicition functions
 
     lin_test_predictions = []
     poly_test_predictions = []
@@ -161,7 +187,8 @@ def predict(x, modell):
     return   
 
 #function that plots your data to a nice graph
-def plot(dates, prices):    
+def plot(dates, prices): 
+
     dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
     plt.scatter(dates, prices, color= 'black', label= 'Data') # plotting the initial datapoints 
     plt.plot(dates, svr_rbf.predict(dates), color= 'red', label= 'RBF model') # plotting the line made by the RBF kernel
@@ -188,8 +215,8 @@ def define_score(prediction_with_rbf, last_price, score):
 def prediction_difference(date, modell):
     a = predict(date, modell) 
     b = get_price_at_date(date)
-    print (a)
-    print (b)
+    print ('Predicted Price:',a)
+    print ('Predicted Price:',b)
     difference = a - b
     return difference
 
@@ -212,9 +239,10 @@ def prediction_difference_avg (test_predictions):
 #function Calls    
 
 #fill arrays with data from the data set  
-read_data('dax20.csv', 1) #file has to be in same dir
+read_data('dax.csv', 1) #file has to be in same dir
 print('Data successfully saved in Arrays')
 
+dates = normalize(dates)
 #get length of the data set  - Not needed at the moment 
 #data_length = get_data_length('fb4.csv')
 #print('The data set has', data_length, 'entrys')
@@ -241,17 +269,17 @@ print('Poly: ',poly_test_predictions)
 print('Rbf: ',rbf_test_predicitions)
 print('Sig: ',sig_test_predicitions)
 
-#make predictions for the future (30th day) with different models
-prediction_with_lin = predict(21, 'lin')
+#make predictions for the future with different models
+prediction_with_lin = predict(1.1, 'lin')
 print('Lin prediction:', prediction_with_lin)
 
-prediction_with_poly = predict(21, 'poly')
+prediction_with_poly = predict(1.1, 'poly')
 print('Poly prediction:', prediction_with_poly)
 
-prediction_with_rbf = predict(21, 'rbf')
+prediction_with_rbf = predict(1.1, 'rbf')
 print('Rbf prediction:', prediction_with_rbf)
 
-prediction_with_sig = predict(21, 'sig')
+prediction_with_sig = predict(1.1, 'sig')
 print('Sig prediction:', prediction_with_sig)
 
 '''
@@ -259,16 +287,20 @@ print ("price at 0", prices[0])
 print ("price at 27", prices[27])
 '''
 #calcutate the difference between the predicted and the actual data for single data point 
-difference_with_lin = prediction_difference(20, 'lin') #input date and modell
+singleDataPoint = np.take(dates, 20) 
+
+print('Single Data Point:', singleDataPoint)
+
+difference_with_lin = prediction_difference(singleDataPoint, 'lin') #input date and modell
 print('Lin difference (prediction - acutal): ', difference_with_lin) #the function prints the predicted price and actual
 
-difference_with_poly = prediction_difference(20, 'poly')
+difference_with_poly = prediction_difference(singleDataPoint, 'poly')
 print('Poly difference (prediction - acutal):', difference_with_poly)
 
-difference_with_rbf = prediction_difference(20, 'rbf')
+difference_with_rbf = prediction_difference(singleDataPoint, 'rbf')
 print('Rbf difference (prediction - acutal):', difference_with_rbf)
 
-difference_with_sig = prediction_difference(20, 'sig')
+difference_with_sig = prediction_difference(singleDataPoint, 'sig')
 print('Sig difference (prediction - acutal):', difference_with_sig)
 
 #calcutate the average difference between the predicted and the actual data for test set for diff modells

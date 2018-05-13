@@ -4,6 +4,7 @@ import csv #allows to reat data from excel sheet
 import numpy as np #allows to perform calculation on our data
 from sklearn.svm import SVR  #allows us to build a predictive model
 import matplotlib.pyplot as plt #allows to plot our data
+import threading
 
 dates = []
 prices = []
@@ -86,10 +87,25 @@ def split_data(dates,prices):
 def train(TrainDates, TrainPrices):
     prices = TrainPrices # name swap from trainprices to prices
     dates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
-    svr_rbf.fit(dates, prices) #fitting the data points in the models
-    svr_lin.fit(dates, prices)
-    svr_poly.fit(dates, prices)
-    svr_sig.fit(dates, prices)
+    #svr_rbf.fit(dates, prices) #fitting the data points in the models without multi threadin
+    #svr_lin.fit(dates, prices)
+    #svr_poly.fit(dates, prices)
+    #svr_sig.fit(dates, prices)
+
+    t1 = threading.Thread(target=svr_rbf.fit, args=(dates, prices)) #fitting the data points in the models with multi threading
+    t2 = threading.Thread(target=svr_lin.fit, args=(dates, prices))
+    t3 = threading.Thread(target=svr_poly.fit, args=(dates, prices))
+    t4 = threading.Thread(target=svr_sig.fit, args=(dates, prices))
+    
+    t1.start()
+    t2.start()
+    t3.start()
+    t4.start()
+    
+    t1.join()
+    t2.join()
+    t3.join()
+    t4.join()
     return
 
 #function that tests your train modell with the test data

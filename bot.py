@@ -6,7 +6,7 @@ from sklearn.svm import SVR  #allows us to build a predictive model
 import matplotlib.pyplot as plt #allows to plot our data
 import threading
 from pandas import Series
-from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
+from sklearn.preprocessing import MinMaxScaler
 
 dates = []
 prices = []
@@ -41,7 +41,7 @@ def normalize(dates):
     normalized = scaler.transform(values)
     
     dates = normalized    
-    print(dates)
+
     return dates  
 
 #function that returns the amount of rows in a given csv file
@@ -100,15 +100,6 @@ def split_data(dates,prices):
 
 #function that trains your modell with the training data
 def train(TrainDates, TrainPrices):
-
-    #series = Series(TrainDates)
-    #values = series.values
-    #values = values.reshape((len(values), 1))
-    #scaler = MinMaxScaler(feature_range=(0,1))
-    #scaler = scaler.fit(values)
-    #normalized = scaler.transform(values)
-    
-    #TrainDates = normalized
    
     TrainDates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
 
@@ -117,6 +108,7 @@ def train(TrainDates, TrainPrices):
     t3 = threading.Thread(target=svr_poly.fit, args=(TrainDates, TrainPrices))
     t4 = threading.Thread(target=svr_sig.fit, args=(TrainDates, TrainPrices))
     
+    #Starts a thread for each modell, so that they get computed simuntainously
     t1.start()
     print('t1 started')
     t2.start()
@@ -126,6 +118,7 @@ def train(TrainDates, TrainPrices):
     t4.start()
     print('t4 started')
     
+    #Synchronize the threads
     t1.join()
     print('t1 done...')
     t2.join()
@@ -190,6 +183,7 @@ def predict(x, modell):
 def plot(dates, prices): 
 
     dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
+
     plt.scatter(dates, prices, color= 'black', label= 'Data') # plotting the initial datapoints 
     plt.plot(dates, svr_rbf.predict(dates), color= 'red', label= 'RBF model') # plotting the line made by the RBF kernel
     plt.plot(dates,svr_lin.predict(dates), color= 'green', label= 'Linear model') # plotting the line made by linear kernel
@@ -236,13 +230,15 @@ def prediction_difference_avg (test_predictions):
     return difference/counter #avg difference
 
 
-#function Calls    
+#function calls    
 
 #fill arrays with data from the data set  
 read_data('dax.csv', 1) #file has to be in same dir
 print('Data successfully saved in Arrays')
 
+#Normalize Data so Modell is 100% more efficient
 dates = normalize(dates)
+
 #get length of the data set  - Not needed at the moment 
 #data_length = get_data_length('fb4.csv')
 #print('The data set has', data_length, 'entrys')
@@ -282,10 +278,6 @@ print('Rbf prediction:', prediction_with_rbf)
 prediction_with_sig = predict(1.1, 'sig')
 print('Sig prediction:', prediction_with_sig)
 
-'''
-print ("price at 0", prices[0])
-print ("price at 27", prices[27])
-'''
 #calcutate the difference between the predicted and the actual data for single data point 
 singleDataPoint = np.take(dates, 20) 
 

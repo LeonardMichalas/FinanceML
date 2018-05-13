@@ -98,14 +98,22 @@ def train(TrainDates, TrainPrices):
     t4 = threading.Thread(target=svr_sig.fit, args=(dates, prices))
     
     t1.start()
+    print('t1 started')
     t2.start()
+    print('t2 started')
     t3.start()
+    print('t3 started')
     t4.start()
+    print('t4 started')
     
     t1.join()
+    print('t1 done...')
     t2.join()
+    print('t2 done...')
     t3.join()
+    print('t3 done...')
     t4.join()
+    print('t4 done...')
     return
 
 #function that tests your train modell with the test data
@@ -204,9 +212,6 @@ def prediction_difference_avg (test_predictions):
         counter += 1 #iterate counter
         
     return difference/counter #avg difference
-
-
-
 
 
 #function Calls    

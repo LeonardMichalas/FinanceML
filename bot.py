@@ -85,17 +85,13 @@ def split_data(dates,prices):
 
 #function that trains your modell with the training data
 def train(TrainDates, TrainPrices):
-    prices = TrainPrices # name swap from trainprices to prices
-    dates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
-    #svr_rbf.fit(dates, prices) #fitting the data points in the models without multi threadin
-    #svr_lin.fit(dates, prices)
-    #svr_poly.fit(dates, prices)
-    #svr_sig.fit(dates, prices)
+   
+    TrainDates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
 
-    t1 = threading.Thread(target=svr_rbf.fit, args=(dates, prices)) #fitting the data points in the models with multi threading
-    t2 = threading.Thread(target=svr_lin.fit, args=(dates, prices))
-    t3 = threading.Thread(target=svr_poly.fit, args=(dates, prices))
-    t4 = threading.Thread(target=svr_sig.fit, args=(dates, prices))
+    t1 = threading.Thread(target=svr_rbf.fit, args=(TrainDates, TrainPrices)) #fitting the data points in the models with multi threading
+    t2 = threading.Thread(target=svr_lin.fit, args=(TrainDates, TrainPrices))
+    t3 = threading.Thread(target=svr_poly.fit, args=(TrainDates, TrainPrices))
+    t4 = threading.Thread(target=svr_sig.fit, args=(TrainDates, TrainPrices))
     
     t1.start()
     print('t1 started')
@@ -118,7 +114,6 @@ def train(TrainDates, TrainPrices):
 
 #function that tests your train modell with the test data
 def test(TestDates, TestPrices):   
-    dates = TestDates #name swap from trainprices to prices
 
     lin_test_predictions = []
     poly_test_predictions = []
@@ -130,7 +125,7 @@ def test(TestDates, TestPrices):
     rbf_test_predicition = 0
     sig_test_predicition = 0
 
-    for date in dates:
+    for date in TestDates:
 
         lin_test_prediction = svr_lin.predict(date)[0]
         poly_test_prediction = svr_poly.predict(date)[0]

@@ -283,7 +283,7 @@ def prediction_difference_avg_for_multiple (lin_test_predictions, poly_test_pred
     t4.join()
     print('t4 done... Sig Average: ', que.get())
     t5.join()
-    print('t5 done... Sig Average: ', que.get())
+    print('t5 done... Elastic Average: ', que.get())
     return
 
 #function calls    

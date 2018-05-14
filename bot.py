@@ -5,8 +5,10 @@ import numpy as np #allows to perform calculation on our data
 from sklearn.svm import SVR  #allows us to build a predictive model
 import matplotlib.pyplot as plt #allows to plot our data
 import threading
+from threading import Thread
 from pandas import Series
 from sklearn.preprocessing import MinMaxScaler
+import Queue
 
 dates = []
 prices = []
@@ -229,6 +231,36 @@ def prediction_difference_avg (test_predictions):
         
     return difference/counter #avg difference
 
+def prediction_difference_avg_for_multiple (lin_test_predictions, poly_test_predictions, rbf_test_predictions, sig_test_predictions):
+
+    que = Queue.Queue(4) #Needed to save results from the threads
+
+    t1 = Thread(target=lambda q, arg1: q.put(prediction_difference_avg(lin_test_predictions, )), args=(que, 'Threads')) #Calculating the average in multiple threads for better performance
+    t2 = Thread(target=lambda q, arg1: q.put(prediction_difference_avg(poly_test_predictions, )), args=(que, 'Threads'))
+    t3 = Thread(target=lambda q, arg1: q.put(prediction_difference_avg(rbf_test_predictions, )), args=(que, 'Threads'))
+    t4 = Thread(target=lambda q, arg1: q.put(prediction_difference_avg(sig_test_predictions, )), args=(que, 'Threads'))
+
+    #Starts a thread for each modell, so that they get computed simuntainously
+    t1.start()
+    print('t1 started')
+    t2.start()
+    print('t2 started')
+    t3.start()
+    print('t3 started')
+    t4.start()
+    print('t4 started')
+    
+    #Synchronize the threads
+    t1.join()
+    print('t1 done... Lin Average: ', que.get())
+    t2.join()
+    print('t2 done... Poly Average: ', que.get())
+    t3.join()
+    print('t3 done... Rbf Average: ', que.get())
+    t4.join()
+    print('t4 done... Sig Average: ', que.get())
+
+    return
 
 #function calls    
 
@@ -296,13 +328,14 @@ difference_with_sig = prediction_difference(singleDataPoint, 'sig')
 print('Sig difference (prediction - acutal):', difference_with_sig)
 
 #calcutate the average difference between the predicted and the actual data for test set for diff modells
-print ("average difference with lin", prediction_difference_avg(lin_test_predictions))
 
-print ("average difference with poly", prediction_difference_avg(poly_test_predictions))
+prediction_difference_avg_for_multiple(lin_test_predictions, poly_test_predictions, rbf_test_predicitions, sig_test_predicitions)
 
-print ("average difference with rbf", prediction_difference_avg(rbf_test_predicitions))
-
-print ("average difference with sig", prediction_difference_avg(sig_test_predicitions))
+#Debrecated... 
+#print ("average difference with lin", prediction_difference_avg(lin_test_predictions))
+#print ("average difference with poly", prediction_difference_avg(poly_test_predictions))
+#print ("average difference with rbf", prediction_difference_avg(rbf_test_predicitions))
+#print ("average difference with sig", prediction_difference_avg(sig_test_predicitions))
 
 #define a score based on your prediction (very negative score => Sell, very positive score => Buy) - Not needed at the moment but working
 #score = define_score(prediction_with_rbf, last_price, score)

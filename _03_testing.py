@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.svm import SVR
+from sklearn.linear_model import SGDRegressor
 import threading
 
 #SVR - TESTING
@@ -30,7 +31,20 @@ def testing_SVR(svr_rbf, svr_lin, svr_poly, TestDates, TestPrices):
 #NEURAL NETWORK - TESTING
 
 #STOCASTIC GRADIENT DESCENT - TESTING
+def testing_SGD(SGD_reg, TestDates, TestPrices):
+    TestDates = np.array(TestDates).ravel() #Brings testing data into the right format for the predicition functions
+    
+    SGD_test_predicitions = []
 
+    SGD_test_prediction = 0
+
+    for date in TestDates:
+
+        SGD_test_prediction = SGD_reg.predict(date)[0]
+
+        SGD_test_predicitions.append([date, SGD_test_prediction])
+
+    return SGD_test_predicitions
 #NEAREST NEIGHBOUR - TESTING
 
 #KERNEL RIDGE REGRESSION - TESTING

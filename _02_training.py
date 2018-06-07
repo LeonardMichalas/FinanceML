@@ -1,5 +1,6 @@
 import numpy as np
 from sklearn.svm import SVR
+from sklearn.linear_model import SGDRegressor
 import threading
 
 #SVR - Training
@@ -32,6 +33,12 @@ def training_SVR(svr_rbf, svr_lin, svr_poly, TrainDates, TrainPrices):
 #NEURAL NETWORK - Training
 
 #STOCASTIC GRADIENT DESCENT - Training
+def training_SGD(SGD_reg, TrainDates, TrainPrices):
+    TrainDates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
+
+    SGD_reg = SGD_reg.fit(TrainDates, TrainPrices) #fitting the data points in the SGD model
+
+    return SGD_reg
 
 #NEAREST NEIGHBOUR - Training
 

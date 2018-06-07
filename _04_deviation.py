@@ -1,14 +1,17 @@
-import Queue
 import threading
+try: 
+    import Queue
+except ImportError: 
+    import queue as Queue
 
 #SVR - PREDICT AVERAGE DIFFERENCE OF MULTIPLE KERNELS
 def deviation_avg_SVR(dates, prices, lin_test_predictions, poly_test_predictions, rbf_test_predictions):
 
     que = Queue.Queue(4) #Needed to save results from the threads
 
-    t1 = threading.Thread(target=lambda q, arg1: q.put(deviation_avg_single_SVR(dates, prices, lin_test_predictions, )), args=(que, 'Threads')) #Calculating the average in multiple threads for better performance
-    t2 = threading.Thread(target=lambda q, arg1: q.put(deviation_avg_single_SVR(dates, prices, poly_test_predictions, )), args=(que, 'Threads'))
-    t3 = threading.Thread(target=lambda q, arg1: q.put(deviation_avg_single_SVR(dates, prices, rbf_test_predictions, )), args=(que, 'Threads'))
+    t1 = threading.Thread(target=lambda q, arg1: q.put(deviation_avg_single(dates, prices, lin_test_predictions, )), args=(que, 'Threads')) #Calculating the average in multiple threads for better performance
+    t2 = threading.Thread(target=lambda q, arg1: q.put(deviation_avg_single(dates, prices, poly_test_predictions, )), args=(que, 'Threads'))
+    t3 = threading.Thread(target=lambda q, arg1: q.put(deviation_avg_single(dates, prices, rbf_test_predictions, )), args=(que, 'Threads'))
 
     #Starts a thread for each modell, so that they get computed simuntainously
     t1.start()
@@ -28,7 +31,7 @@ def deviation_avg_SVR(dates, prices, lin_test_predictions, poly_test_predictions
     return
 
 #SVR - PREDICT AVERAGE DIFFERENCE
-def deviation_avg_single_SVR (dates, prices, test_predictions):
+def deviation_avg_single (dates, prices, test_predictions):
     counter = 0
     difference = 0
     for prediction in test_predictions: 

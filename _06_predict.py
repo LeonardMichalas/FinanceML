@@ -1,5 +1,5 @@
 #FUTURE PREDICTION -> ADD YOUR MODELL HERE
-def predict(svr_lin, svr_poly, svr_rbf, x, modell):
+def predict(svr_lin, svr_poly, svr_rbf, SGD_reg, x, modell):
     
     if modell == 'lin':
         lin_prediction = svr_lin.predict(x)[0]
@@ -12,6 +12,10 @@ def predict(svr_lin, svr_poly, svr_rbf, x, modell):
     if modell == 'rbf':
         rbf_prediction = svr_rbf.predict(x)[0]
         print('Rbf Future Prediction:', rbf_prediction)
+    
+    if modell == 'SGD':
+        SGD_prediction = SGD_reg.predict(x)[0]
+        print('SGD Future Prediction:', SGD_prediction)
 
     return 
 

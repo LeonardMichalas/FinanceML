@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.svm import SVR
 from sklearn.linear_model import SGDRegressor
+from sklearn import neighbors 
+from sklearn.gaussian_process import GaussianProcessRegressor
 import threading
 
 #SVR - Training
@@ -45,6 +47,12 @@ def training_SGD(SGD_reg, TrainDates, TrainPrices):
 #KERNEL RIDGE REGRESSION - Training
 
 #GAUSIAN PROZESS - Training
+def training_Gaus(Gaus_reg, TrainDates, TrainPrices):
+    TrainDates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
+
+    Gaus_reg = Gaus_reg.fit(TrainDates, TrainPrices) #fitting the data points in the SGD model
+
+    return Gaus_reg
 
 #DECISSION TREE - Training
 

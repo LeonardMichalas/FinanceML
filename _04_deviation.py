@@ -30,7 +30,7 @@ def deviation_avg_SVR(dates, prices, lin_test_predictions, poly_test_predictions
     print('Rbf Average: ', que.get())
     return
 
-#SVR - PREDICT AVERAGE DIFFERENCE
+#PREDICT AVERAGE DIFFERENCE
 def deviation_avg_single (dates, prices, test_predictions):
     counter = 0
     difference = 0

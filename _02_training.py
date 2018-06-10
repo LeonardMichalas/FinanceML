@@ -3,6 +3,7 @@ from sklearn.svm import SVR
 from sklearn.linear_model import SGDRegressor
 from sklearn import neighbors 
 from sklearn.gaussian_process import GaussianProcessRegressor
+from sklearn.neural_network import MLPRegressor
 import threading
 
 #SVR - Training
@@ -33,6 +34,13 @@ def training_SVR(svr_rbf, svr_lin, svr_poly, TrainDates, TrainPrices):
     return svr_rbf, svr_lin, svr_poly
 
 #NEURAL NETWORK - Training
+def training_MLP(MLP_reg, TrainDates, TrainPrices):
+
+    TrainDates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
+
+    MLP_reg = MLP_reg.fit(TrainDates, TrainPrices)
+
+    return MLP_reg
 
 #STOCASTIC GRADIENT DESCENT - Training
 def training_SGD(SGD_reg, TrainDates, TrainPrices):

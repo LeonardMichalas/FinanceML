@@ -31,6 +31,19 @@ def testing_SVR(svr_rbf, svr_lin, svr_poly, TestDates, TestPrices):
     return lin_test_predictions, poly_test_predictions, rbf_test_predicitions
 
 #NEURAL NETWORK - TESTING
+def testing_MLP(MLP_reg, TestDates, TestPrices):
+    TestDates = np.array(TestDates).ravel() #Brings testing data into the right format for the predicition functions
+
+    MLP_test_predicitions = []
+
+    MLP_test_prediction = 0
+
+    for date in TestDates:
+        MLP_test_prediction = MLP_reg.predict(date)[0]
+
+        MLP_test_predicitions.append([date, MLP_test_prediction])
+
+    return MLP_test_predicitions    
 
 #STOCASTIC GRADIENT DESCENT - TESTING
 def testing_SGD(SGD_reg, TestDates, TestPrices):

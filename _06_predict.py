@@ -24,6 +24,7 @@ def predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, x, m
     if modell == 'NN':
         NN_prediction = NN_reg.predict(x)[0]
         print('Nearest Neighbor Future Prediction:', NN_prediction)
+        
     if modell == 'MLP':
         MLP_prediction = MLP_reg.predict(x)[0]
         print('MLP NN Future Prediction:', MLP_prediction)    

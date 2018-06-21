@@ -89,7 +89,7 @@ Gaus_reg = GaussianProcessRegressor(kernel=None, alpha=0.1, optimizer='fmin_l_bf
 #GRADIENT TREE BOOSTING - INITIALIZATION
 
 ###READ DATA###
-file = 'data/BTCEUR.csv'
+file = 'data/dax.csv' #oder data/BTCEUR.csv'
 dates, prices = prep.read_data(file, 1)
 
 ###NORMALIZE THE DATA###

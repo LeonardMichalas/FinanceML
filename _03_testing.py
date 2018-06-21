@@ -48,6 +48,20 @@ def testing_SGD(SGD_reg, TestDates, TestPrices):
 
     return SGD_test_predicitions
 #NEAREST NEIGHBOUR - TESTING
+def testing_NN(NN_reg, TestDates, TestPrices):
+    TestDates = np.array(TestDates).ravel() #Brings testing data into the right format for the predicition functions
+    
+    NN_test_predicitions = []
+
+    NN_test_prediction = 0
+
+    for date in TestDates:
+
+        NN_test_prediction = NN_reg.predict(date)[0]
+
+        NN_test_predicitions.append([date, NN_test_prediction])
+
+    return NN_test_predicitions
 
 #KERNEL RIDGE REGRESSION - TESTING
 

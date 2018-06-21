@@ -43,6 +43,12 @@ def training_SGD(SGD_reg, TrainDates, TrainPrices):
     return SGD_reg
 
 #NEAREST NEIGHBOUR - Training
+def training_NN(NN_reg, TrainDates, TrainPrices):
+    TrainDates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
+
+    NN_reg = NN_reg.fit(TrainDates, TrainPrices) #fitting the data points in the SGD model
+
+    return NN_reg
 
 #KERNEL RIDGE REGRESSION - Training
 

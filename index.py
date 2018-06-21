@@ -11,7 +11,7 @@ from sklearn.svm import SVR  #import SVM/Modells
 from sklearn.linear_model import SGDRegressor #import Stochastic Gradient Decent regression model
 from sklearn import neighbors #import nearest neighbor models
 from sklearn.gaussian_process import GaussianProcessRegressor #import Gaussian Process regression model
-from sklearn.gaussian_process.kernels import RBF, ConstantKernel as C
+from sklearn.gaussian_process.kernels import RBF, ConstantKernel, Matern
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -34,7 +34,7 @@ rbf_test_predicitions = []
 SGD_test_predictions = []
 
 #NEAREST NEIGHBOUR - VARIABLES
-
+NN_test_predictions = []
 
 #KERNEL RIDGE REGRESSION - VARIABLES
 
@@ -64,11 +64,20 @@ SGD_reg = SGDRegressor()
 
 
 #NEAREST NEIGHBOUR - INITIALIZATION
-
+NN_reg = neighbors.KNeighborsRegressor(n_neighbors=5, weights='uniform')
 
 #KERNEL RIDGE REGRESSION - INITIALIZATION
 
 #GAUSSIAN PROCESS REGRESSION - INITIALIZATION
+#create our own kernel based on Matern
+#white kernel not added because our data is assumed noiseless
+#nu values of 3/2 or 5/2 most common. Specifies smoothness.
+#normalize_y=True says the mean is not at 0
+#constant kernel shifts mean
+#myKernel = ConstantKernel(constant_value=2.5) + Matern(length_scale=7, nu=3/2)
+#myRBF = RBF(length_scale=1, length_scale_bounds=(1e-5, 1e5)) #attempt with RBF kernel results in same as Matern
+#myRBF2 = 1.0 * RBF(1.0) #should be the same as default kernel used if no parameter is given but results in very different graph
+#MaternK = Matern(length_scale=.05, nu=1.5) #usage results in sudden drop and then flat horizontal line
 Gaus_reg = GaussianProcessRegressor(normalize_y=True)
 
 #DECISSION TREE - INITIALIZATION
@@ -87,7 +96,7 @@ dates = prep.normalize(dates)
 TrainDates,TrainPrices,TestDates,TestPrices = prep.split_data(dates,prices)
 
 ###TRAIN THE MODELLS###
-
+'''
 #SVR
 
 svr_rbf, svr_lin, svr_poly = train.training_SVR(svr_rbf, svr_lin, svr_poly, TrainDates, TrainPrices)
@@ -98,9 +107,9 @@ svr_rbf, svr_lin, svr_poly = train.training_SVR(svr_rbf, svr_lin, svr_poly, Trai
 SGD_reg = train.training_SGD(SGD_reg, TrainDates, TrainPrices)
 
 #NEAREST NEIGHBOUR
-
+NN_reg = train.training_NN(NN_reg, TrainDates, TrainPrices)
 #KERNEL RIDGE REGRESSION
-
+'''
 #GAUSIAN PROZESS 
 Gaus_reg = train.training_Gaus(Gaus_reg, TrainDates, TrainPrices)
 
@@ -109,7 +118,7 @@ Gaus_reg = train.training_Gaus(Gaus_reg, TrainDates, TrainPrices)
 #GRADIENT TREE BOOSTING
 
 ###TEST THE TRAINED MODELLS###
-
+'''
 #SVR
 
 lin_test_predictions, poly_test_predictions, rbf_test_predicitions = test.testing_SVR(svr_rbf, svr_lin, svr_poly, TestDates, TestPrices)
@@ -119,9 +128,9 @@ lin_test_predictions, poly_test_predictions, rbf_test_predicitions = test.testin
 #STOCASTIC GRADIENT DESCENT 
 SGD_test_predictions = test.testing_SGD(SGD_reg, TestDates, TestPrices)
 #NEAREST NEIGHBOUR
-
+NN_test_predictions = test.testing_NN(NN_reg, TestDates, TestPrices)
 #KERNEL RIDGE REGRESSION
-
+'''
 #GAUSIAN PROZESS 
 Gaus_test_predictions = test.testing_Gaus(Gaus_reg, TestDates, TestPrices)
 #DECISSION TREE
@@ -130,7 +139,7 @@ Gaus_test_predictions = test.testing_Gaus(Gaus_reg, TestDates, TestPrices)
 
 ###CALCULATE AVERAGE DEVIATION####
 print('Average Deviation:')
-
+'''
 #SVR
 dev.deviation_avg_SVR(dates, prices, lin_test_predictions, poly_test_predictions, rbf_test_predicitions)
 
@@ -140,9 +149,9 @@ dev.deviation_avg_SVR(dates, prices, lin_test_predictions, poly_test_predictions
 print('SGD avg:', dev.deviation_avg_single(dates, prices, SGD_test_predictions))
 
 #NEAREST NEIGHBOUR
-
+print('NN avg:', dev.deviation_avg_single(dates, prices, NN_test_predictions))
 #KERNEL RIDGE REGRESSION
-
+'''
 #GAUSIAN PROZESS 
 print('Gaussian Process avg:', dev.deviation_avg_single(dates, prices, Gaus_test_predictions))
 #DECISSION TREE
@@ -152,8 +161,9 @@ print('Gaussian Process avg:', dev.deviation_avg_single(dates, prices, Gaus_test
 ###PLOT THE DATA###
 #all Algorithms on one graph. Just pass the model as argument here.
 
-plot.plot(svr_rbf, svr_lin, svr_poly, SGD_reg, Gaus_reg, dates, prices)
-
+#plot.plot(svr_rbf, svr_lin, svr_poly, SGD_reg, NN_reg, Gaus_reg, dates, prices)
+plot.single_plot(Gaus_reg, dates, prices)
+'''
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')
 
@@ -167,6 +177,8 @@ pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, Gaus_reg, 1.1, 'SGD')
 
 pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, Gaus_reg, 1.1, 'Gaus')
 
+pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, 1.1, 'NN')
+'''
 
 
 

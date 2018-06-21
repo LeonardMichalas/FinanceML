@@ -1,5 +1,5 @@
 #FUTURE PREDICTION -> ADD YOUR MODELL HERE
-def predict(svr_lin, svr_poly, svr_rbf, SGD_reg, Gaus_reg, x, modell):
+def predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, x, modell):
     
     if modell == 'lin':
         lin_prediction = svr_lin.predict(x)[0]
@@ -20,6 +20,10 @@ def predict(svr_lin, svr_poly, svr_rbf, SGD_reg, Gaus_reg, x, modell):
     if modell == 'Gaus':
         Gaus_prediction = Gaus_reg.predict(x)[0]
         print('Gaussian Process Future Prediction:', Gaus_prediction)
+
+    if modell == 'NN':
+        NN_prediction = NN_reg.predict(x)[0]
+        print('Nearest Neighbor Future Prediction:', NN_prediction)
 
     return 
 

@@ -81,7 +81,7 @@ NN_reg = neighbors.KNeighborsRegressor(n_neighbors=5, weights='uniform')
 #myRBF = RBF(length_scale=1, length_scale_bounds=(1e-5, 1e5)) #attempt with RBF kernel results in same as Matern
 #myRBF2 = 1.0 * RBF(1.0) #should be the same as default kernel used if no parameter is given but results in very different graph
 #MaternK = Matern(length_scale=.05, nu=1.5) #usage results in sudden drop and then flat horizontal line
-Gaus_reg = GaussianProcessRegressor(normalize_y=True) #plese check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html#sklearn.gaussian_process.GaussianProcessRegressor
+Gaus_reg = GaussianProcessRegressor(kernel=None, alpha=1e-10, optimizer='fmin_l_bfgs_b', n_restarts_optimizer=0, normalize_y=False, copy_X_train=True, random_state=None) #plese check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html#sklearn.gaussian_process.GaussianProcessRegressor
 
 #DECISSION TREE - INITIALIZATION
 
@@ -177,19 +177,19 @@ plot.plot(svr_rbf, svr_lin, svr_poly, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates,
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, Gaus_reg, MLP_reg, 1.1, 'lin')
+pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'lin')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, Gaus_reg, MLP_reg, 1.1, 'poly')
+pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'poly')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, Gaus_reg, MLP_reg, 1.1, 'rbf')
+pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'rbf')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, Gaus_reg, MLP_reg, 1.1, 'SGD')
+pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'SGD')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, Gaus_reg, MLP_reg, 1.1, 'Gaus')
+pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'Gaus')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, Gaus_reg, MLP_reg, 1.1, 'MLP')
+pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'MLP')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, 1.1, 'NN')
+pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, NN_reg, Gaus_reg, 1.1, 'NN')
 
 
 

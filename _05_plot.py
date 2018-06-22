@@ -28,10 +28,10 @@ def single_plot(model, dates, prices):
     dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
 
     plt.scatter(dates, prices, color= 'black', label= 'Data') # plotting the initial datapoints 
-    plt.plot(dates,model.predict(dates), color= 'orange', label= 'your model') # plotting the line made by algorithm
+    plt.plot(dates,model.predict(dates), color= 'orange', label= 'Neural Network') # plotting the line made by algorithm
     plt.xlabel('Day')
     plt.ylabel('Price')
-    plt.title('DAX Prediction')
+    plt.title('BTC Prediction')
     plt.legend()
     plt.show()
 

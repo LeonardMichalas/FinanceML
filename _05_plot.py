@@ -31,7 +31,7 @@ def single_plot(model, dates, prices):
     plt.plot(dates,model.predict(dates), color= 'orange', label= 'Neural Network') # plotting the line made by algorithm
     plt.xlabel('Day')
     plt.ylabel('Price')
-    plt.title('BTC Prediction')
+    plt.title('DAX Prediction')
     plt.legend()
     plt.show()
 

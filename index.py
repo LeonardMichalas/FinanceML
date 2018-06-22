@@ -59,8 +59,8 @@ svr_rbf = SVR(kernel = 'rbf', C = 1e3, gamma = 0.1)
 
 
 #NEURAL NETWORK - INITIALIZATION
-#MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='lbfgs', alpha=1e-5, learning_rate='constant', max_iter=500, random_state=1)
-MLP_reg = MLPRegressor() #default
+MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='lbfgs', alpha=1e-5, learning_rate='constant', max_iter=500, random_state=1)
+#MLP_reg = MLPRegressor() #default
 
 
 #STOCASTIC GRADIENT DESCENT - INITIALIZATION
@@ -90,7 +90,7 @@ Gaus_reg = GaussianProcessRegressor(kernel=None, alpha=0.1, optimizer='fmin_l_bf
 #GRADIENT TREE BOOSTING - INITIALIZATION
 
 ###READ DATA###
-file = 'data/BTCEUR.csv' #oder data/BTCEUR.csv'
+file = 'data/dax.csv' #oder data/BTCEUR.csv'
 dates, prices = prep.read_data(file, 1)
 
 ###NORMALIZE THE DATA###
@@ -173,7 +173,7 @@ print('Gaussian Process avg:', dev.deviation_avg_single(dates, prices, Gaus_test
 #all Algorithms on one graph. Just pass the model as argument here.
 
 plot.plot(svr_rbf, svr_lin, svr_poly, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices)
-plot.single_plot(MLP_reg, dates, prices) 
+# plot.single_plot(MLP_reg, dates, prices) Plot MLP
 
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')

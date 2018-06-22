@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 #Plot all the trained modells here -> ADD ADDITIONAL MODELLS HERE ASWELL
 def plot(svr_rbf, svr_lin, svr_poly, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices, name):
     
-    dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
+    #dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
 
     plt.scatter(dates, prices, color= 'black', label= 'Data') # plotting the initial datapoints 
     plt.plot(dates, svr_rbf.predict(dates), color= 'red', label= 'RBF model') # plotting the line made by the RBF kernel

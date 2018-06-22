@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Plot all the trained modells here -> ADD ADDITIONAL MODELLS HERE ASWELL
-def plot(svr_rbf, svr_lin, svr_poly, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices):
+def plot(svr_rbf, svr_lin, svr_poly, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices, name):
     
     dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
 
@@ -16,14 +16,14 @@ def plot(svr_rbf, svr_lin, svr_poly, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, 
     plt.plot(dates,MLP_reg.predict(dates), color= 'yellow', label= 'MLP Neural Network') # plotting the line made by MLP NN algorithm
     plt.xlabel('Day')
     plt.ylabel('Price')
-    plt.title('DAX Prediction')
+    plt.title(name)
     plt.legend()
     plt.show()
 
     return 
 
     #Plot single model here. good for testing.
-def single_plot(model, dates, prices):
+def single_plot(model, dates, prices, name):
     
     dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
 
@@ -31,7 +31,7 @@ def single_plot(model, dates, prices):
     plt.plot(dates,model.predict(dates), color= 'orange', label= 'Neural Network') # plotting the line made by algorithm
     plt.xlabel('Day')
     plt.ylabel('Price')
-    plt.title('DAX Prediction')
+    plt.title(name)
     plt.legend()
     plt.show()
 

@@ -89,7 +89,10 @@ Gaus_reg = GaussianProcessRegressor(kernel=None, alpha=0.1, optimizer='fmin_l_bf
 
 #GRADIENT TREE BOOSTING - INITIALIZATION
 
-###READ DATA###
+###READ DATA### 
+
+#If you change the file, also change the name!!
+name = 'DAX - Prediction' #der BTC - Prediction
 file = 'data/dax.csv' #oder data/BTCEUR.csv'
 dates, prices = prep.read_data(file, 1)
 
@@ -172,8 +175,8 @@ print('Gaussian Process avg:', dev.deviation_avg_single(dates, prices, Gaus_test
 ###PLOT THE DATA###
 #all Algorithms on one graph. Just pass the model as argument here.
 
-plot.plot(svr_rbf, svr_lin, svr_poly, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices)
-# plot.single_plot(MLP_reg, dates, prices) Plot MLP
+plot.plot(svr_rbf, svr_lin, svr_poly, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices, name)
+# plot.single_plot(MLP_reg, dates, prices, name) Plot MLP
 
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')

@@ -59,12 +59,12 @@ svr_rbf = SVR(kernel = 'rbf', C = 1e3, gamma = 0.1)
 
 
 #NEURAL NETWORK - INITIALIZATION
-MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='lbfgs', alpha=1e-5, learning_rate='constant', max_iter=500, random_state=1)
-#MLP_reg = MLPRegressor() #default
+MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='lbfgs', alpha=1e-10, learning_rate='constant', max_iter=150, random_state=1)
+#MLP_reg = MLPRegressor(hidden_layer_sizes=(200,200), solver='lbfgs', max_iter=300, learning_rate='adaptive', random_state=1) #default 
 
 
 #STOCASTIC GRADIENT DESCENT - INITIALIZATION
-SGD_reg = SGDRegressor() #please check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDRegressor.html#sklearn.linear_model.SGDRegressor
+SGD_reg = SGDRegressor(max_iter=5, tol=None) #please check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDRegressor.html#sklearn.linear_model.SGDRegressor
 
 
 #NEAREST NEIGHBOUR - INITIALIZATION

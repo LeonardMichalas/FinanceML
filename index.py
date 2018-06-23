@@ -52,8 +52,8 @@ Gaus_test_predictions = []
 #svr_lin = SVR(kernel = 'linear', C = 1e3)
 #svr_poly = SVR(kernel = 'poly', C = 1e3, degree = 2)
 #svr_rbf = SVR(kernel = 'rbf', C = 1e3, gamma = 0.1) 
-#svr = SVR(kernel = 'rbf', C = 1.0 , gamma = 0.1, cache_size=200, max_iter=-1) #default
-svr = SVR(kernel = 'linear', C = 1e3, gamma = 0.1, cache_size=200, max_iter=-1)
+#SVR = SVR(kernel = 'rbf', C = 1.0 , gamma = 0.1, cache_size=200, max_iter=-1) #default
+SVR = SVR(kernel = 'linear', C = 1e3, gamma = 0.1, cache_size=200, max_iter=-1)
 
 #NEURAL NETWORK - INITIALIZATION
 MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='lbfgs', alpha=1e-10, learning_rate='constant', max_iter=150, random_state=1) #optimized
@@ -104,7 +104,7 @@ TrainDates,TrainPrices,TestDates,TestPrices = prep.split_data(dates,prices)
 ###TRAIN THE MODELLS###
 
 #SVR
-SVR = train.training_SVR(svr, TrainDates, TrainPrices)
+SVR = train.training_SVR(SVR, TrainDates, TrainPrices)
 
 #NEURAL NETWORK
 MLP_reg = train.training_MLP(MLP_reg, TrainDates, TrainPrices)

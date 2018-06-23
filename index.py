@@ -49,14 +49,14 @@ Gaus_test_predictions = []
 ###INITIALIZE THE MODELLS HERE#####
 #SVR - INITIALIZATION
 
-#svr_default = SVR(kernel = 'rbf', C = 1.0, degree=3, gamma=0.1)
 #svr_lin = SVR(kernel = 'linear', C = 1e3)
 #svr_poly = SVR(kernel = 'poly', C = 1e3, degree = 2)
 #svr_rbf = SVR(kernel = 'rbf', C = 1e3, gamma = 0.1) 
-svr = SVR(kernel = 'rbf', C = 1.0 , gamma = 0.1, cache_size=200, max_iter=-1) #default
+#svr = SVR(kernel = 'rbf', C = 1.0 , gamma = 0.1, cache_size=200, max_iter=-1) #default
+svr = SVR(kernel = 'linear', C = 1e3, gamma = 0.1, cache_size=200, max_iter=-1)
 
 #NEURAL NETWORK - INITIALIZATION
-MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='lbfgs', alpha=1e-10, learning_rate='constant', max_iter=150, random_state=1)
+MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='lbfgs', alpha=1e-10, learning_rate='constant', max_iter=150, random_state=1) #optimized
 #MLP_reg = MLPRegressor(hidden_layer_sizes=(200,200), solver='lbfgs', max_iter=300, learning_rate='adaptive', random_state=1) #default 
 
 
@@ -173,8 +173,8 @@ print('Gaussian Process avg:', dev.deviation_avg_single(dates, prices, Gaus_test
 #all Algorithms on one graph. Just pass the model as argument here.
 
 plot.plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices, name)
-#plot.single_plot(MLP_reg, dates, prices, name) #Plot MLP
-#plot.single_plot(MLP_reg, dates, prices, name) #Plot MLP
+#plot.single_plot(MLP_reg, dates, prices, name, 'Neural Network') #Plot MLP
+plot.single_plot(SVR, dates, prices, name, 'Support Vectore Regression') #Plot SVR
 
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')

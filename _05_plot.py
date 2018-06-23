@@ -21,12 +21,12 @@ def plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices, name):
     return 
 
     #Plot single model here. good for testing.
-def single_plot(model, dates, prices, name):
+def single_plot(model, dates, prices, name, modelname):
     
     dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
 
     plt.scatter(dates, prices, color= 'black', label= 'Data') # plotting the initial datapoints 
-    plt.plot(dates,model.predict(dates), color= 'orange', label= 'Neural Network') # plotting the line made by algorithm
+    plt.plot(dates,model.predict(dates), color= 'orange', label= modelname) # plotting the line made by algorithm
     plt.xlabel('Day')
     plt.ylabel('Price')
     plt.title(name)

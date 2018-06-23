@@ -6,6 +6,23 @@ from sklearn.gaussian_process import GaussianProcessRegressor
 import threading
 
 #SVR - TESTING
+
+def testing_SVR(SVR, TestDates, TestPrices):
+    TestDates = np.array(TestDates).ravel()
+
+    SVR_test_predicitions = []
+
+    SVR_test_prediction = 0
+
+    for date in TestDates:
+        SVR_test_prediction = SVR.predict(date)[0]
+
+        SVR_test_predicitions.append([date, SVR_test_prediction])
+
+    return SVR_test_predicitions 
+
+'''
+DEPRICATED...
 def testing_SVR(svr_rbf, svr_lin, svr_poly, TestDates, TestPrices):  
 
     TestDates = np.array(TestDates).ravel() #Brings testing data into the right format for the predicition functions
@@ -29,6 +46,7 @@ def testing_SVR(svr_rbf, svr_lin, svr_poly, TestDates, TestPrices):
         rbf_test_predicitions.append([date, rbf_test_predicition])
 
     return lin_test_predictions, poly_test_predictions, rbf_test_predicitions
+'''
 
 #NEURAL NETWORK - TESTING
 def testing_MLP(MLP_reg, TestDates, TestPrices):
@@ -60,6 +78,7 @@ def testing_SGD(SGD_reg, TestDates, TestPrices):
         SGD_test_predicitions.append([date, SGD_test_prediction])
 
     return SGD_test_predicitions
+
 #NEAREST NEIGHBOUR - TESTING
 def testing_NN(NN_reg, TestDates, TestPrices):
     TestDates = np.array(TestDates).ravel() #Brings testing data into the right format for the predicition functions

@@ -23,14 +23,10 @@ TrainDates,TrainPrices=[],[]
 TestDates,TestPrices=[],[]
 
 #SVR - VARIABLES
-
-lin_test_predictions = []
-poly_test_predictions = []
-rbf_test_predicitions = []
+SVR_test_predictions = []
 
 #NEURAL NETWORK - VARIABLES
 MLP_test_predictions = []
-
 
 #STOCASTIC GRADIENT DESCENT - VARIABLES
 SGD_test_predictions = []
@@ -53,10 +49,11 @@ Gaus_test_predictions = []
 ###INITIALIZE THE MODELLS HERE#####
 #SVR - INITIALIZATION
 
-svr_lin = SVR(kernel = 'linear', C = 1e3)
-svr_poly = SVR(kernel = 'poly', C = 1e3, degree = 2)
-svr_rbf = SVR(kernel = 'rbf', C = 1e3, gamma = 0.1) 
-
+#svr_default = SVR(kernel = 'rbf', C = 1.0, degree=3, gamma=0.1)
+#svr_lin = SVR(kernel = 'linear', C = 1e3)
+#svr_poly = SVR(kernel = 'poly', C = 1e3, degree = 2)
+#svr_rbf = SVR(kernel = 'rbf', C = 1e3, gamma = 0.1) 
+svr = SVR(kernel = 'rbf', C = 1.0 , gamma = 0.1, cache_size=200, max_iter=-1) #default
 
 #NEURAL NETWORK - INITIALIZATION
 MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='lbfgs', alpha=1e-10, learning_rate='constant', max_iter=150, random_state=1)
@@ -107,11 +104,9 @@ TrainDates,TrainPrices,TestDates,TestPrices = prep.split_data(dates,prices)
 ###TRAIN THE MODELLS###
 
 #SVR
-
-svr_rbf, svr_lin, svr_poly = train.training_SVR(svr_rbf, svr_lin, svr_poly, TrainDates, TrainPrices)
+SVR = train.training_SVR(svr, TrainDates, TrainPrices)
 
 #NEURAL NETWORK
-
 MLP_reg = train.training_MLP(MLP_reg, TrainDates, TrainPrices)
 
 #STOCHASTIC GRADIENT DESCENT 
@@ -131,8 +126,7 @@ Gaus_reg = train.training_Gaus(Gaus_reg, TrainDates, TrainPrices)
 ###TEST THE TRAINED MODELLS###
 
 #SVR
-
-lin_test_predictions, poly_test_predictions, rbf_test_predicitions = test.testing_SVR(svr_rbf, svr_lin, svr_poly, TestDates, TestPrices)
+SVR_test_predictions = test.testing_SVR(SVR, TestDates, TestPrices)
 
 #NEURAL NETWORK
 
@@ -143,6 +137,7 @@ SGD_test_predictions = test.testing_SGD(SGD_reg, TestDates, TestPrices)
 
 #NEAREST NEIGHBOUR
 NN_test_predictions = test.testing_NN(NN_reg, TestDates, TestPrices)
+
 #KERNEL RIDGE REGRESSION
 
 #GAUSIAN PROZESS 
@@ -155,7 +150,7 @@ Gaus_test_predictions = test.testing_Gaus(Gaus_reg, TestDates, TestPrices)
 print('Average Deviation:')
 
 #SVR
-dev.deviation_avg_SVR(dates, prices, lin_test_predictions, poly_test_predictions, rbf_test_predicitions)
+print('SVR avg:', dev.deviation_avg_single(dates, prices, SVR_test_predictions))
 
 #NEURAL NETWORK
 print('MLP avg:', dev.deviation_avg_single(dates, prices, MLP_test_predictions))
@@ -177,25 +172,22 @@ print('Gaussian Process avg:', dev.deviation_avg_single(dates, prices, Gaus_test
 ###PLOT THE DATA###
 #all Algorithms on one graph. Just pass the model as argument here.
 
-plot.plot(svr_rbf, svr_lin, svr_poly, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices, name)
-plot.single_plot(MLP_reg, dates, prices, name) #Plot MLP
+plot.plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices, name)
+#plot.single_plot(MLP_reg, dates, prices, name) #Plot MLP
+#plot.single_plot(MLP_reg, dates, prices, name) #Plot MLP
 
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'lin')
+pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'SVR')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'poly')
+pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'SGD')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'rbf')
+pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'Gaus')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'SGD')
+pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'MLP')
 
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'Gaus')
-
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'MLP')
-
-pred.predict(svr_lin, svr_poly, svr_rbf, SGD_reg, NN_reg, NN_reg, Gaus_reg, 1.1, 'NN')
+pred.predict(SVR, SGD_reg, NN_reg, NN_reg, Gaus_reg, 1.1, 'NN')
 
 
 

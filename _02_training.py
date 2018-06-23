@@ -7,6 +7,16 @@ from sklearn.neural_network import MLPRegressor
 import threading
 
 #SVR - Training
+def training_SVR(SVR, TrainDates, TrainPrices):
+
+    TrainDates = np.reshape(TrainDates,(len(TrainDates), 1))
+
+    SVR = SVR.fit(TrainDates, TrainPrices)
+
+    return SVR
+
+'''
+DEPRICATE....
 def training_SVR(svr_rbf, svr_lin, svr_poly, TrainDates, TrainPrices):
    
     TrainDates = np.reshape(TrainDates,(len(TrainDates), 1)) #converting to matrix of n X 1 / name swap from traindates to dates
@@ -32,6 +42,7 @@ def training_SVR(svr_rbf, svr_lin, svr_poly, TrainDates, TrainPrices):
     print('t3 done...')
 
     return svr_rbf, svr_lin, svr_poly
+'''
 
 #NEURAL NETWORK - Training
 def training_MLP(MLP_reg, TrainDates, TrainPrices):

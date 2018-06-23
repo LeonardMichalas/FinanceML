@@ -4,7 +4,9 @@ try:
 except ImportError: 
     import queue as Queue
 
-#SVR - PREDICT AVERAGE DIFFERENCE OF MULTIPLE KERNELS
+#SVR - PREDICT AVERAGE DIFFERENCE OF MULTIPLE KERNELS 
+'''
+DEPRICATED....
 def deviation_avg_SVR(dates, prices, lin_test_predictions, poly_test_predictions, rbf_test_predictions):
 
     que = Queue.Queue(4) #Needed to save results from the threads
@@ -29,6 +31,7 @@ def deviation_avg_SVR(dates, prices, lin_test_predictions, poly_test_predictions
     t3.join()
     print('Rbf Average: ', que.get())
     return
+'''
 
 #PREDICT AVERAGE DIFFERENCE
 def deviation_avg_single (dates, prices, test_predictions):

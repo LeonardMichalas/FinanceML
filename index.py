@@ -88,10 +88,12 @@ GBRT_reg = GradientBoostingRegressor(loss='lad', learning_rate=0.1, n_estimators
 ###READ DATA### 
 
 #If you change the file, also change the name!!
-name = 'DAX - Prediction' #der BTC - Prediction
-file = 'data/dax.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
+#name = 'DAX - Prediction' #der BTC - Prediction
+#file = 'data/dax.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
 #name = 'BTC - Prediction' #der BTC - Prediction 
 #file = 'data/BTCEUR.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
+name = 'Fortune 500 - Prediction'
+file = 'data/fortune500.csv'
 dates, prices = prep.read_data(file, 1)
 
 ###NORMALIZE THE DATA###
@@ -154,8 +156,10 @@ print('Average Deviation:')
 #SVR
 print('SVR avg:', dev.deviation_avg_single(dates, prices, SVR_test_predictions))
 print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, SVR_test_predictions))
+
 #NEURAL NETWORK
 print('MLP avg:', dev.deviation_avg_single(dates, prices, MLP_test_predictions))
+print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, MLP_test_predictions))
 
 #STOCASTIC GRADIENT DESCENT 
 print('SGD avg:', dev.deviation_avg_single(dates, prices, SGD_test_predictions))
@@ -176,9 +180,9 @@ print('GBRT avg:', dev.deviation_avg_single(dates, prices, GBRT_test_predictions
 #all Algorithms on one graph. Just pass the model as argument here.
 
 plot.plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, dates, prices, name)
-#plot.single_plot(MLP_reg, dates, prices, name, 'Neural Network') #Plot MLP
-#plot.single_plot(SVR, dates, prices, name, 'Support Vectore Regression') #Plot SVR
-plot.single_plot(Gaus_reg, dates, prices, name, 'Gausian Process Regression') #Plot SVR
+plot.single_plot(MLP_reg, dates, prices, name, 'Neural Network') #Plot MLP
+plot.single_plot(SVR, dates, prices, name, 'Support Vectore Regression') #Plot SVR
+#plot.single_plot(Gaus_reg, dates, prices, name, 'Gausian Process Regression') #Plot SVR
 
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')

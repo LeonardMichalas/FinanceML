@@ -1,5 +1,5 @@
 #FUTURE PREDICTION -> ADD YOUR MODELL HERE
-def predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, x, modell):
+def predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, x, modell):
     
     if modell == 'SVR':
         SVR_prediction = SVR.predict(x)[0]
@@ -19,7 +19,15 @@ def predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, x, modell):
         
     if modell == 'MLP':
         MLP_prediction = MLP_reg.predict(x)[0]
-        print('MLP NN Future Prediction:', MLP_prediction)    
+        print('MLP NN Future Prediction:', MLP_prediction)
+
+    if modell == 'DT':
+        DT_prediction = DT_reg.predict(x)[0]
+        print('DT Future Prediction:', DT_prediction)
+
+    if modell == 'GBRT':
+        GBRT_prediction = GBRT_reg.predict(x)[0]
+        print('GBRT Future Prediction:', GBRT_prediction)
 
     return 
 

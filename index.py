@@ -13,6 +13,8 @@ from sklearn import neighbors #import nearest neighbor models
 from sklearn.gaussian_process import GaussianProcessRegressor #import Gaussian Process regression model
 from sklearn.gaussian_process.kernels import RBF, ConstantKernel, Matern
 from sklearn.neural_network import MLPRegressor
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.ensemble import GradientBoostingRegressor
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -41,10 +43,10 @@ NN_test_predictions = []
 Gaus_test_predictions = []
 
 #DECISSION TREE - VARIABLES
-
+DT_predictions = []
 
 #GRADIENT TREE BOOSTING - VARIABLES
-
+GBRT_predictions = []
 
 ###INITIALIZE THE MODELLS HERE#####
 #SVR - INITIALIZATION
@@ -82,9 +84,10 @@ NN_reg = neighbors.KNeighborsRegressor(n_neighbors=5, weights='uniform')
 Gaus_reg = GaussianProcessRegressor(kernel=None, alpha=0.1, optimizer='fmin_l_bfgs_b', n_restarts_optimizer=0, normalize_y=True, copy_X_train=False, random_state=None) #plese check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html#sklearn.gaussian_process.GaussianProcessRegressor
 
 #DECISSION TREE - INITIALIZATION
-
+DT_reg = DecisionTreeRegressor()  # TODO work on params
 
 #GRADIENT TREE BOOSTING - INITIALIZATION
+GBRT_reg = GradientBoostingRegressor()  # TODO work on params
 
 ###READ DATA### 
 
@@ -120,8 +123,10 @@ NN_reg = train.training_NN(NN_reg, TrainDates, TrainPrices)
 Gaus_reg = train.training_Gaus(Gaus_reg, TrainDates, TrainPrices)
 
 #DECISSION TREE
+DT_reg = train.training_DT(DT_reg, TrainDates, TrainPrices)
 
 #GRADIENT TREE BOOSTING
+GBRT_reg = train.training_GBRT(GBRT_reg, TrainDates, TrainPrices)
 
 ###TEST THE TRAINED MODELLS###
 
@@ -138,13 +143,15 @@ SGD_test_predictions = test.testing_SGD(SGD_reg, TestDates, TestPrices)
 #NEAREST NEIGHBOUR
 NN_test_predictions = test.testing_NN(NN_reg, TestDates, TestPrices)
 
-#KERNEL RIDGE REGRESSION
-
 #GAUSIAN PROZESS 
 Gaus_test_predictions = test.testing_Gaus(Gaus_reg, TestDates, TestPrices)
+
 #DECISSION TREE
+DT_test_predictions = test.testing_DT(DT_reg, TestDates, TestPrices)
 
 #GRADIENT TREE BOOSTING
+GBRT_test_predictions = test.testing_GBRT(GBRT_reg, TestDates, TestPrices)
+
 
 ###CALCULATE AVERAGE DEVIATION####
 print('Average Deviation:')
@@ -166,13 +173,15 @@ print('NN avg:', dev.deviation_avg_single(dates, prices, NN_test_predictions))
 print('Gaussian Process avg:', dev.deviation_avg_single(dates, prices, Gaus_test_predictions))
 
 #DECISSION TREE
+print('DT avg:', dev.deviation_avg_single(dates, prices, DT_test_predictions))
 
 #GRADIENT TREE BOOSTING
+print('GBRT avg:', dev.deviation_avg_single(dates, prices, GBRT_test_predictions))
 
 ###PLOT THE DATA###
 #all Algorithms on one graph. Just pass the model as argument here.
 
-plot.plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices, name)
+plot.plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, dates, prices, name)
 #plot.single_plot(MLP_reg, dates, prices, name, 'Neural Network') #Plot MLP
 #plot.single_plot(SVR, dates, prices, name, 'Support Vectore Regression') #Plot SVR
 plot.single_plot(Gaus_reg, dates, prices, name, 'Gausian Process Regression') #Plot SVR
@@ -180,15 +189,19 @@ plot.single_plot(Gaus_reg, dates, prices, name, 'Gausian Process Regression') #P
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')
 
-pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'SVR')
+pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, 1.1, 'SVR')
 
-pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'SGD')
+pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, 1.1, 'SGD')
 
-pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'Gaus')
+pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, 1.1, 'Gaus')
 
-pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, 1.1, 'MLP')
+pred.predict(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, 1.1, 'MLP')
 
-pred.predict(SVR, SGD_reg, NN_reg, NN_reg, Gaus_reg, 1.1, 'NN')
+pred.predict(SVR, SGD_reg, NN_reg, NN_reg, Gaus_reg, DT_reg, GBRT_reg, 1.1, 'NN')
+
+pred.predict(SVR, SGD_reg, NN_reg, NN_reg, Gaus_reg, DT_reg, GBRT_reg, 1.1, 'DT')
+
+pred.predict(SVR, SGD_reg, NN_reg, NN_reg, Gaus_reg, DT_reg, GBRT_reg, 1.1, 'GBRT')
 
 
 

@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 #Plot all the trained modells here -> ADD ADDITIONAL MODELLS HERE ASWELL
-def plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices, name):
+def plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg , dates, prices, name):
     
     #dates = np.reshape(dates,(len(dates), 1)) #converting to matrix of n X 1
 
@@ -12,6 +12,8 @@ def plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, dates, prices, name):
     plt.plot(dates,Gaus_reg.predict(dates), color= 'orange', label= 'Gaussian Process') # plotting the line made by Gaussian Process algorithm
     plt.plot(dates,NN_reg.predict(dates), color= 'brown', label= 'Nearest Neighbor') # plotting the line made by Nearest Neighbors algorithm
     plt.plot(dates,MLP_reg.predict(dates), color= 'yellow', label= 'MLP Neural Network') # plotting the line made by MLP NN algorithm
+    plt.plot(dates, DT_reg.predict(dates), color='green', label='Decision Tree')  # DT
+    plt.plot(dates, GBRT_reg.predict(dates), color='pink', label='Gradient Boosting Tree')  # GBRT
     plt.xlabel('Day')
     plt.ylabel('Price')
     plt.title(name)

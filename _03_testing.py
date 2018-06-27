@@ -95,8 +95,6 @@ def testing_NN(NN_reg, TestDates, TestPrices):
 
     return NN_test_predicitions
 
-#KERNEL RIDGE REGRESSION - TESTING
-
 #GAUSIAN PROZESS - TESTING
 def testing_Gaus(Gaus_reg, TestDates, TestPrices):
     TestDates = np.array(TestDates).ravel() #Brings testing data into the right format for the predicition functions
@@ -112,7 +110,31 @@ def testing_Gaus(Gaus_reg, TestDates, TestPrices):
         Gaus_test_predicitions.append([date, Gaus_test_prediction])
 
     return Gaus_test_predicitions
+
 #DECISSION TREE - TESTING
+def testing_DT(DT_reg, TestDates, TestPrices):
+    TestDates = np.array(TestDates).ravel()  # Brings testing data into the right format for the predicition functions
+
+    DT_test_predictions = []
+
+    for date in TestDates:
+
+        DT_test_prediction = DT_reg.predict(date)[0]
+
+        DT_test_predictions.append([date, DT_test_prediction])
+
+    return DT_test_predictions
+
 
 #GRADIENT TREE BOOSTING - TESTING
-    
+def testing_GBRT(GBRT_reg, TestDates, TestPrices):
+    TestDates = np.array(TestDates).ravel()  # Brings testing data into the right format for the predicition functions
+
+    GBRT_test_predictions = []
+
+    for date in TestDates:
+        GBRT_test_prediction = GBRT_reg.predict(date)[0]
+
+        GBRT_test_predictions.append([date, GBRT_test_prediction])
+
+    return GBRT_test_predictions

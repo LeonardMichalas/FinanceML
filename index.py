@@ -153,7 +153,7 @@ print('Average Deviation:')
 
 #SVR
 print('SVR avg:', dev.deviation_avg_single(dates, prices, SVR_test_predictions))
-
+print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, SVR_test_predictions))
 #NEURAL NETWORK
 print('MLP avg:', dev.deviation_avg_single(dates, prices, MLP_test_predictions))
 

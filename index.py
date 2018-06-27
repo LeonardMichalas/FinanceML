@@ -36,9 +36,6 @@ SGD_test_predictions = []
 #NEAREST NEIGHBOUR - VARIABLES
 NN_test_predictions = []
 
-#KERNEL RIDGE REGRESSION - VARIABLES
-
-
 #GAUSIAN PROZESS - VARIABLES
 Gaus_test_predictions = []
 
@@ -61,10 +58,8 @@ SVR = SVR(kernel = 'linear', C = 1e3, gamma = 0.1, cache_size=200, max_iter=-1)
 MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='lbfgs', alpha=1e-10, learning_rate='constant', max_iter=150, random_state=1) #optimized
 #MLP_reg = MLPRegressor(hidden_layer_sizes=(200,200), solver='lbfgs', max_iter=300, learning_rate='adaptive', random_state=1) #default 
 
-
 #STOCASTIC GRADIENT DESCENT - INITIALIZATION
 SGD_reg = SGDRegressor(max_iter=5, tol=None) #please check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDRegressor.html#sklearn.linear_model.SGDRegressor
-
 
 #NEAREST NEIGHBOUR - INITIALIZATION
 NN_reg = neighbors.KNeighborsRegressor(n_neighbors=5, weights='uniform')
@@ -158,25 +153,32 @@ print('Average Deviation:')
 
 #SVR
 print('SVR avg:', dev.deviation_avg_single(dates, prices, SVR_test_predictions))
+print('SVR smape:', dev.smape(dates, prices, SVR_test_predictions))
 
 #NEURAL NETWORK
 print('MLP avg:', dev.deviation_avg_single(dates, prices, MLP_test_predictions))
+print('MLP smape:', dev.smape(dates, prices, MLP_test_predictions))
 
 #STOCASTIC GRADIENT DESCENT 
 print('SGD avg:', dev.deviation_avg_single(dates, prices, SGD_test_predictions))
+print('SGD smape:', dev.smape(dates, prices, SGD_test_predictions))
 
 #NEAREST NEIGHBOUR
 print('NN avg:', dev.deviation_avg_single(dates, prices, NN_test_predictions))
+print('NN smape:', dev.smape(dates, prices, NN_test_predictions))
 #KERNEL RIDGE REGRESSION
 
 #GAUSIAN PROZESS 
 print('Gaussian Process avg:', dev.deviation_avg_single(dates, prices, Gaus_test_predictions))
+print('Gaussian Process smape:', dev.smape(dates, prices, Gaus_test_predictions))
 
 #DECISSION TREE
 print('DT avg:', dev.deviation_avg_single(dates, prices, DT_test_predictions))
+print('DT smape:', dev.smape(dates, prices, DT_test_predictions))
 
 #GRADIENT TREE BOOSTING
 print('GBRT avg:', dev.deviation_avg_single(dates, prices, GBRT_test_predictions))
+print('GBRT smape:', dev.smape(dates, prices, GBRT_test_predictions))
 
 ###PLOT THE DATA###
 #all Algorithms on one graph. Just pass the model as argument here.

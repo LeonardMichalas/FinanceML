@@ -45,6 +45,21 @@ def deviation_avg_single (dates, prices, test_predictions):
         
     return difference/counter #avg difference
 
+#PREDICT SMAPEx
+def smape (dates, prices, test_predictions):
+    counter = 0
+    difference = 0
+    smape = 0
+
+    for prediction in test_predictions: 
+        actual = get_price_at_date(dates, prices, prediction[0])
+        my_prediction = prediction[1]
+        difference = difference + abs(my_prediction - actual) 
+        counter += 1 #iterate counter
+        smape += abs(my_prediction - actual)/((abs(actual)+abs(my_prediction))/2)
+        
+    return 100/float(counter) * smape #avg difference    
+
 #function that returns the price for a given date
 def get_price_at_date(dates, prices, date):
     my_index = dates.tolist().index(date)

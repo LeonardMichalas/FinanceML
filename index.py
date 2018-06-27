@@ -178,7 +178,7 @@ print('GBRT avg:', dev.deviation_avg_single(dates, prices, GBRT_test_predictions
 plot.plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, dates, prices, name)
 #plot.single_plot(MLP_reg, dates, prices, name, 'Neural Network') #Plot MLP
 #plot.single_plot(SVR, dates, prices, name, 'Support Vectore Regression') #Plot SVR
-# plot.single_plot(Gaus_reg, dates, prices, name, 'Gausian Process Regression') #Plot SVR
+plot.single_plot(Gaus_reg, dates, prices, name, 'Gausian Process Regression') #Plot SVR
 
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')

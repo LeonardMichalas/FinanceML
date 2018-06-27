@@ -154,23 +154,30 @@ print('Average Deviation:')
 #SVR
 print('SVR avg:', dev.deviation_avg_single(dates, prices, SVR_test_predictions))
 print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, SVR_test_predictions))
+
 #NEURAL NETWORK
 print('MLP avg:', dev.deviation_avg_single(dates, prices, MLP_test_predictions))
+print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, MLP_test_predictions))
 
 #STOCASTIC GRADIENT DESCENT 
 print('SGD avg:', dev.deviation_avg_single(dates, prices, SGD_test_predictions))
+print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, SGD_test_predictions))
 
 #NEAREST NEIGHBOUR
 print('NN avg:', dev.deviation_avg_single(dates, prices, NN_test_predictions))
+print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, NN_test_predictions))
 
 #GAUSIAN PROZESS 
 print('Gaussian Process avg:', dev.deviation_avg_single(dates, prices, Gaus_test_predictions))
+print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, Gaus_test_predictions))
 
 #DECISSION TREE
 print('DT avg:', dev.deviation_avg_single(dates, prices, DT_test_predictions))
+print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, DT_test_predictions))
 
 #GRADIENT TREE BOOSTING
 print('GBRT avg:', dev.deviation_avg_single(dates, prices, GBRT_test_predictions))
+print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, GBRT_test_predictions))
 
 ###PLOT THE DATA###
 #all Algorithms on one graph. Just pass the model as argument here.

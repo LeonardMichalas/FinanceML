@@ -60,9 +60,10 @@ def smape_and_smdape (dates, prices, test_predictions):
         smape += abs(my_prediction - actual)/((abs(actual)+abs(my_prediction))/2)
         sapes.append(abs(my_prediction - actual)/((abs(actual)+abs(my_prediction))/2))
 
-    smdape = [int(len(sapes)/2)]
+    sapes.sort()
+    smdape = sapes[int(len(sapes)/2)]
 
-    return 100/float(counter) * smape, smdape #avg difference
+    return 100/float(counter) * smape, 100*smdape  # avg difference
 
 #function that returns the price for a given date
 def get_price_at_date(dates, prices, date):

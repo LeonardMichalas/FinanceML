@@ -81,8 +81,7 @@ def training_Gaus(Gaus_reg, TrainDates, TrainPrices):
 
 # DECISION TREE - Training
 def training_DT (DT_reg, TrainDates, TrainPrices):
-    TrainDates = np.reshape(TrainDates,
-                            (len(TrainDates), 1))  # converting to matrix of n X 1 / name swap from traindates to dates
+    TrainDates = np.reshape(TrainDates, (len(TrainDates), 1))  # converting to matrix of n X 1 / name swap from traindates to dates
 
     DT_reg = DT_reg.fit(TrainDates, TrainPrices)
 
@@ -90,8 +89,7 @@ def training_DT (DT_reg, TrainDates, TrainPrices):
 
 # GRADIENT TREE BOOSTING - Training
 def training_GBRT (GBRT_reg, TrainDates, TrainPrices):
-    TrainDates = np.reshape(TrainDates,
-                            (len(TrainDates), 1))  # converting to matrix of n X 1 / name swap from traindates to dates
+    TrainDates = np.reshape(TrainDates, (len(TrainDates), 1))  # converting to matrix of n X 1 / name swap from traindates to dates
 
     GBRT_reg = GBRT_reg.fit(TrainDates, TrainPrices)
 

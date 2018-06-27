@@ -36,17 +36,14 @@ SGD_test_predictions = []
 #NEAREST NEIGHBOUR - VARIABLES
 NN_test_predictions = []
 
-#KERNEL RIDGE REGRESSION - VARIABLES
-
-
 #GAUSIAN PROZESS - VARIABLES
 Gaus_test_predictions = []
 
 #DECISSION TREE - VARIABLES
-DT_predictions = []
+DT_test_predictions = []
 
 #GRADIENT TREE BOOSTING - VARIABLES
-GBRT_predictions = []
+GBRT_test_predictions = []
 
 ###INITIALIZE THE MODELLS HERE#####
 #SVR - INITIALIZATION
@@ -69,8 +66,6 @@ SGD_reg = SGDRegressor(max_iter=5, tol=None) #please check paramters for optimiz
 #NEAREST NEIGHBOUR - INITIALIZATION
 NN_reg = neighbors.KNeighborsRegressor(n_neighbors=5, weights='uniform')
 
-#KERNEL RIDGE REGRESSION - INITIALIZATION
-
 #GAUSSIAN PROCESS REGRESSION - INITIALIZATION
 #create our own kernel based on Matern
 #white kernel not added because our data is assumed noiseless
@@ -84,10 +79,11 @@ NN_reg = neighbors.KNeighborsRegressor(n_neighbors=5, weights='uniform')
 Gaus_reg = GaussianProcessRegressor(kernel=None, alpha=0.1, optimizer='fmin_l_bfgs_b', n_restarts_optimizer=0, normalize_y=True, copy_X_train=False, random_state=None) #plese check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html#sklearn.gaussian_process.GaussianProcessRegressor
 
 #DECISSION TREE - INITIALIZATION
-DT_reg = DecisionTreeRegressor()  # TODO work on params
+DT_reg = DecisionTreeRegressor(criterion='mse', splitter='best', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=None, random_state=None, max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, presort=False)  # TODO work on params
 
 #GRADIENT TREE BOOSTING - INITIALIZATION
-GBRT_reg = GradientBoostingRegressor()  # TODO work on params
+GBRT_reg = GradientBoostingRegressor(loss='lad', learning_rate=0.1, n_estimators=500, subsample=1.0, criterion='friedman_mse', min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_depth=3, min_impurity_decrease=0.0, min_impurity_split=None, init=None, random_state=None, max_features=None, alpha=0.9, verbose=0, max_leaf_nodes=None, warm_start=False, presort='auto')
+# TODO work on params
 
 ###READ DATA### 
 
@@ -134,7 +130,6 @@ GBRT_reg = train.training_GBRT(GBRT_reg, TrainDates, TrainPrices)
 SVR_test_predictions = test.testing_SVR(SVR, TestDates, TestPrices)
 
 #NEURAL NETWORK
-
 MLP_test_predictions = test.testing_MLP(MLP_reg, TestDates, TestPrices)
 
 #STOCASTIC GRADIENT DESCENT 
@@ -167,7 +162,6 @@ print('SGD avg:', dev.deviation_avg_single(dates, prices, SGD_test_predictions))
 
 #NEAREST NEIGHBOUR
 print('NN avg:', dev.deviation_avg_single(dates, prices, NN_test_predictions))
-#KERNEL RIDGE REGRESSION
 
 #GAUSIAN PROZESS 
 print('Gaussian Process avg:', dev.deviation_avg_single(dates, prices, Gaus_test_predictions))
@@ -184,7 +178,7 @@ print('GBRT avg:', dev.deviation_avg_single(dates, prices, GBRT_test_predictions
 plot.plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, dates, prices, name)
 #plot.single_plot(MLP_reg, dates, prices, name, 'Neural Network') #Plot MLP
 #plot.single_plot(SVR, dates, prices, name, 'Support Vectore Regression') #Plot SVR
-plot.single_plot(Gaus_reg, dates, prices, name, 'Gausian Process Regression') #Plot SVR
+# plot.single_plot(Gaus_reg, dates, prices, name, 'Gausian Process Regression') #Plot SVR
 
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')

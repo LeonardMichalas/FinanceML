@@ -79,11 +79,11 @@ NN_reg = neighbors.KNeighborsRegressor(n_neighbors=5, weights='uniform')
 Gaus_reg = GaussianProcessRegressor(kernel=None, alpha=0.1, optimizer='fmin_l_bfgs_b', n_restarts_optimizer=0, normalize_y=True, copy_X_train=False, random_state=None) #plese check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.gaussian_process.GaussianProcessRegressor.html#sklearn.gaussian_process.GaussianProcessRegressor
 
 #DECISSION TREE - INITIALIZATION
-DT_reg = DecisionTreeRegressor(criterion='mse', splitter='best', max_depth=None, min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_features=None, random_state=None, max_leaf_nodes=None, min_impurity_decrease=0.0, min_impurity_split=None, presort=False)  # TODO work on params
+DT_reg = DecisionTreeRegressor(criterion='friedman_mse', max_depth=14, presort=True)
 
 #GRADIENT TREE BOOSTING - INITIALIZATION
-GBRT_reg = GradientBoostingRegressor(loss='lad', learning_rate=0.1, n_estimators=500, subsample=1.0, criterion='friedman_mse', min_samples_split=2, min_samples_leaf=1, min_weight_fraction_leaf=0.0, max_depth=3, min_impurity_decrease=0.0, min_impurity_split=None, init=None, random_state=None, max_features=None, alpha=0.9, verbose=0, max_leaf_nodes=None, warm_start=False, presort='auto')
-# TODO work on params
+GBRT_reg = GradientBoostingRegressor(loss='huber', n_estimators=400, max_depth=5, criterion='friedman_mse', alpha=0.99)  # verbose, warm_start and presort do not optmize the outcome but time and usability
+
 
 ###READ DATA### 
 
@@ -188,9 +188,9 @@ print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, GBRT_test_predict
 #all Algorithms on one graph. Just pass the model as argument here.
 
 plot.plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, dates, prices, name)
-plot.single_plot(MLP_reg, dates, prices, name, 'Neural Network') #Plot MLP
-plot.single_plot(SVR, dates, prices, name, 'Support Vectore Regression') #Plot SVR
-plot.single_plot(Gaus_reg, dates, prices, name, 'Gausian Process Regression') #Plot SVR
+#plot.single_plot(MLP_reg, dates, prices, name, 'Neural Network') #Plot MLP
+#plot.single_plot(SVR, dates, prices, name, 'Support Vectore Regression') #Plot SVR
+plot.single_plot(GBRT_reg, dates, prices, name, 'GBRT Regression') #Plot SVR
 
 ###MAKE FUTURE PREDICTIONS###
 print('Future Predictions:')

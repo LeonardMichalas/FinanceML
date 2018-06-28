@@ -88,10 +88,10 @@ GBRT_reg = GradientBoostingRegressor(loss='lad', learning_rate=0.1, n_estimators
 ###READ DATA### 
 
 #If you change the file, also change the name!!
-#name = 'DAX - Prediction' #der BTC - Prediction
-#file = 'data/dax.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
-name = 'BTC - Prediction' #der BTC - Prediction 
-file = 'data/BTCEUR.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
+name = 'DAX - Prediction' #der BTC - Prediction
+file = 'data/dax.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
+#name = 'BTC - Prediction' #der BTC - Prediction 
+#file = 'data/BTCEUR.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
 #name = 'S & P 500 - Prediction'
 #file = 'data/sp500.csv'
 #name = 'Dow Jones - Prediction'

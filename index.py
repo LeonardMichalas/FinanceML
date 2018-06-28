@@ -92,6 +92,11 @@ name = 'DAX - Prediction' #der BTC - Prediction
 file = 'data/dax.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
 #name = 'BTC - Prediction' #der BTC - Prediction 
 #file = 'data/BTCEUR.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
+#name = 'S & P 500 - Prediction'
+#file = 'data/sp500.csv'
+#name = 'Dow Jones - Prediction'
+#file = 'data/dow.csv'
+
 dates, prices = prep.read_data(file, 1)
 
 ###NORMALIZE THE DATA###
@@ -183,8 +188,8 @@ print('Smape and Smdape:', dev.smape_and_smdape(dates, prices, GBRT_test_predict
 #all Algorithms on one graph. Just pass the model as argument here.
 
 plot.plot(SVR, SGD_reg, NN_reg, Gaus_reg, MLP_reg, DT_reg, GBRT_reg, dates, prices, name)
-#plot.single_plot(MLP_reg, dates, prices, name, 'Neural Network') #Plot MLP
-#plot.single_plot(SVR, dates, prices, name, 'Support Vectore Regression') #Plot SVR
+plot.single_plot(MLP_reg, dates, prices, name, 'Neural Network') #Plot MLP
+plot.single_plot(SVR, dates, prices, name, 'Support Vectore Regression') #Plot SVR
 plot.single_plot(Gaus_reg, dates, prices, name, 'Gausian Process Regression') #Plot SVR
 
 ###MAKE FUTURE PREDICTIONS###

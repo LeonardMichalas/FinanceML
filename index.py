@@ -58,10 +58,8 @@ SVR = SVR(kernel = 'linear', C = 1e3, gamma = 0.1, cache_size=200, max_iter=-1)
 MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='lbfgs', alpha=1e-10, learning_rate='constant', max_iter=150, random_state=1) #optimized
 #MLP_reg = MLPRegressor(hidden_layer_sizes=(200,200), solver='lbfgs', max_iter=300, learning_rate='adaptive', random_state=1) #default 
 
-
 #STOCASTIC GRADIENT DESCENT - INITIALIZATION
 SGD_reg = SGDRegressor(loss='squared_epsilon_insensitive', learning_rate='constant', alpha=.00001) #please check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDRegressor.html#sklearn.linear_model.SGDRegressor
-
 
 #NEAREST NEIGHBOUR - INITIALIZATION
 NN_reg = neighbors.KNeighborsRegressor(n_neighbors=5, weights='uniform')
@@ -84,12 +82,13 @@ DT_reg = DecisionTreeRegressor(criterion='friedman_mse', max_depth=14, presort=T
 #GRADIENT TREE BOOSTING - INITIALIZATION
 GBRT_reg = GradientBoostingRegressor(loss='huber', n_estimators=400, max_depth=5, criterion='friedman_mse', alpha=0.99)  # verbose, warm_start and presort do not optmize the outcome but time and usability
 
-
 ###READ DATA### 
 
 #If you change the file, also change the name!!
-name = 'DAX - Prediction' #der BTC - Prediction
-file = 'data/dax.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
+#name = 'DAX - Prediction' #der BTC - Prediction
+#file = 'data/dax.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
+name = 'ETH- Prediction' #der BTC - Prediction
+file = 'data/ETHUSD.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
 #name = 'BTC - Prediction' #der BTC - Prediction 
 #file = 'data/BTCEUR.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
 #name = 'S & P 500 - Prediction'

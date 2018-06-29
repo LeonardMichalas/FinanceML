@@ -60,7 +60,7 @@ MLP_reg = MLPRegressor(hidden_layer_sizes=(300,300), activation='relu', solver='
 
 
 #STOCASTIC GRADIENT DESCENT - INITIALIZATION
-SGD_reg = SGDRegressor(max_iter=5, tol=None) #please check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDRegressor.html#sklearn.linear_model.SGDRegressor
+SGD_reg = SGDRegressor(loss='squared_epsilon_insensitive', learning_rate='constant', alpha=.00001) #please check paramters for optimization: http://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDRegressor.html#sklearn.linear_model.SGDRegressor
 
 
 #NEAREST NEIGHBOUR - INITIALIZATION

@@ -85,10 +85,10 @@ GBRT_reg = GradientBoostingRegressor(loss='huber', n_estimators=400, max_depth=5
 ###READ DATA### 
 
 #If you change the file, also change the name!!
-#name = 'DAX - Prediction' #der BTC - Prediction
-#file = 'data/dax.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
-name = 'ETH- Prediction' #der BTC - Prediction
-file = 'data/ETHUSD.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
+name = 'DAX - Prediction' #der BTC - Prediction
+file = 'data/dax.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
+#name = 'ETH- Prediction' #der BTC - Prediction
+#file = 'data/ETHUSD.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
 #name = 'BTC - Prediction' #der BTC - Prediction 
 #file = 'data/BTCEUR.csv' #oder data/BTCEUR.csv' oder data/dax-old.csv
 #name = 'S & P 500 - Prediction'
